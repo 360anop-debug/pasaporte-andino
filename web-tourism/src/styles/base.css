@@ -1,0 +1,42 @@
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+html { -webkit-text-size-adjust: 100%; background: var(--burgundy-900); }
+body {
+  font-family: var(--font-ui); color: var(--ink); font-size: 16px; line-height: 1.4;
+  background: var(--burgundy-900); overscroll-behavior: none; -webkit-tap-highlight-color: transparent;
+}
+img { max-width: 100%; display: block; }
+img.img-missing { background: linear-gradient(135deg, var(--parchment-2), var(--parchment-3)); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+#app { min-height: 100%; }
+.boot { min-height: 100vh; display: grid; place-content: center; justify-items: center; gap: 12px; color: var(--gold-200); background: var(--burgundy-grad); }
+
+/* ---------- shell móvil ---------- */
+.shell { min-height: 100vh; min-height: 100dvh; }
+.stage { position: relative; min-height: 100vh; min-height: 100dvh; }
+.screen {
+  min-height: 100vh; min-height: 100dvh; outline: none;
+  padding-bottom: calc(var(--nav-h) + var(--safe-bottom) + 8px);
+  background: var(--burgundy-700);
+}
+.no-chrome .screen { padding-bottom: 0; }
+.side-nav, .side-panel { display: none; }
+
+.page { position: relative; min-height: 100%; }
+.page-burgundy {
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(255, 200, 120, .16), transparent 60%),
+    radial-gradient(140% 80% at 50% 120%, rgba(0, 0, 0, .45), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, .025) 0 2px, transparent 2px 12px),
+    var(--burgundy-grad);
+  min-height: 100vh; min-height: 100dvh;
+}
+.pad { padding: 0 14px; }
+.stack > * + * { margin-top: 12px; }

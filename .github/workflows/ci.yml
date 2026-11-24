@@ -1,0 +1,262 @@
+name: Pasaporte Andino CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend PHP 8.4 + MariaDB
+    runs-on: ubuntu-24.04
+    services:
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: pa_test
+          MARIADB_USER: pa_app
+          MARIADB_PASSWORD: pa_local_dev
+        ports: ['3306:3306']
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql, gd, fileinfo, mbstring, exif
+          coverage: none
+      - run: php -v | tee php-version.txt
+      - name: Composer
+        working-directory: backend-integration
+        run: composer install --no-interaction --no-progress
+      - name: Sintaxis PHP 8.4
+        working-directory: backend-integration
+        run: find src bin public tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Migraciones up / down / up
+        working-directory: backend-integration
+        env: { PA_ENV: test, PA_DB_DSN: 'mysql:host=127.0.0.1;dbname=pa_test;charset=utf8mb4', PA_DB_USER: pa_app, PA_DB_PASS: pa_local_dev, PA_SECRET: ci-secret-0123456789-abcdefghijklmnop }
+        run: |
+          php bin/migrate.php up && php bin/migrate.php status
+          php bin/migrate.php down --to=000 && php bin/migrate.php up | tee ../migraciones.txt
+      - name: PHPUnit (integración con MariaDB real)
+        working-directory: backend-integration
+        env: { PA_DB_DSN: 'mysql:host=127.0.0.1;dbname=pa_test;charset=utf8mb4', PA_DB_USER: pa_app, PA_DB_PASS: pa_local_dev }
+        run: vendor/bin/phpunit --log-junit ../phpunit-junit.xml --testdox | tee ../phpunit.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-backend
+          path: |
+            php-version.txt
+            migraciones.txt
+            phpunit.txt
+            phpunit-junit.xml
+
+  web:
+    name: Web (build producción / staging / android-staging)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm, cache-dependency-path: web-tourism/package-lock.json }
+      - working-directory: web-tourism
+        run: |
+          npm ci
+          npm test
+          npm run build:prod && mv dist dist-prod
+          npx vite build --mode staging && mv dist dist-staging
+          npx vite build --mode android-staging && mv dist dist-android-staging
+          ! grep -rl "127.0.0.1\|10.0.2.2\|localhost:8080" dist-prod/ || (echo "URL local en build de producción" && exit 1)
+          test ! -d dist-prod/demo-media
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: |
+            web-tourism/dist-prod
+            web-tourism/dist-staging
+            web-tourism/dist-android-staging
+
+  android:
+    name: Android APK + E2E en emulador
+    needs: [web]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    services:
+      mariadb:
+        image: mariadb:11.4
+        env: { MARIADB_ROOT_PASSWORD: root }
+        ports: ['3306:3306']
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: web-dist, path: web-tourism }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '21' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm, cache-dependency-path: android/package-lock.json }
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.4', extensions: 'pdo_mysql, gd, fileinfo, mbstring, exif', coverage: none }
+      - run: cd backend-integration && composer install --no-interaction --no-progress --no-dev
+      - run: cd android && npm ci
+      - name: Keystore de PRUEBA efímero (no es el del propietario; no se publica)
+        run: |
+          keytool -genkeypair -v -keystore "$RUNNER_TEMP/prueba.jks" -alias pasaporte -keyalg RSA -keysize 4096 -validity 3650 \
+            -storepass "${{ github.run_id }}-pa" -keypass "${{ github.run_id }}-pa" -dname "CN=Pasaporte Andino PRUEBA, O=Cultura Educa 360, C=PE"
+      - name: APK release (configuración de producción)
+        env:
+          PA_KEYSTORE_PATH: ${{ runner.temp }}/prueba.jks
+          PA_KEYSTORE_PASSWORD: ${{ github.run_id }}-pa
+          PA_KEY_ALIAS: pasaporte
+          PA_KEY_PASSWORD: ${{ github.run_id }}-pa
+        run: |
+          rm -rf web-tourism/dist && cp -r web-tourism/dist-prod web-tourism/dist
+          cd android && npx cap sync android && cd android && ./gradlew --no-daemon assembleRelease
+          mkdir -p ../../instaladores && cp app/build/outputs/apk/release/app-release.apk ../../instaladores/PasaporteAndino-Android.apk
+      - name: APK staging (depurable, API del host para E2E)
+        run: |
+          rm -rf web-tourism/dist && cp -r web-tourism/dist-android-staging web-tourism/dist
+          cd android && PA_STAGING=1 npx cap sync android && cd android && ./gradlew --no-daemon assembleDebug
+          cp app/build/outputs/apk/debug/app-debug.apk ../../instaladores/PasaporteAndino-Android-staging.apk
+      - name: Verificación de firma y metadatos
+        run: |
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          mkdir -p qa/logs
+          $BT/apksigner verify --verbose --print-certs instaladores/PasaporteAndino-Android.apk | tee qa/logs/apksigner-release.txt
+          $BT/aapt2 dump badging instaladores/PasaporteAndino-Android.apk | tee qa/logs/aapt-badging-release.txt
+          $BT/aapt2 dump permissions instaladores/PasaporteAndino-Android.apk | tee qa/logs/aapt-permisos-release.txt
+          sha256sum instaladores/*.apk | tee qa/logs/sha256-apk.txt
+      - name: Backend de staging en el host
+        run: bash scripts/ci/backend-staging.sh
+      - run: npm i --no-save --prefix qa/e2e playwright@1.56.1 && cp -r qa/e2e/node_modules ./node_modules
+      - name: Habilitar KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - name: Emulador Android 14 (393x852 aprox.) + E2E
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_7
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash scripts/ci/android-e2e.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android
+          path: |
+            instaladores/*.apk
+            qa/capturas/android
+            qa/logs
+
+  windows:
+    name: Windows EXE + instalación/E2E/desinstalación
+    needs: [web]
+    runs-on: windows-2022
+    timeout-minutes: 60
+    defaults: { run: { shell: pwsh } }
+    env:
+      PA_ENV: staging
+      PA_DB_DSN: 'mysql:host=127.0.0.1;dbname=pa_staging;charset=utf8mb4'
+      PA_DB_USER: root
+      PA_DB_PASS: ''
+      PA_SECRET: staging-secret-not-for-production-0123456789
+      PA_SHOW_DEMO: '1'
+      PA_COOKIE_SECURE: '0'
+      PA_MIN_READING_SECONDS: '5'
+      PA_CORS_ORIGINS: 'http://127.0.0.1:8080,app://pasaporte'
+      PA_PUBLIC_BASE_URL: 'http://127.0.0.1:8080/pasaporte'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: web-dist, path: web-tourism }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm, cache-dependency-path: windows/package-lock.json }
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.4', extensions: 'pdo_mysql, gd, fileinfo, mbstring, exif', coverage: none }
+      - uses: ankane/setup-mariadb@v1
+        with: { mariadb-version: '11.4', database: pa_staging }
+      - run: cd windows; npm ci
+      - name: EXE de producción
+        run: |
+          Remove-Item -Recurse -Force windows/web -ErrorAction SilentlyContinue
+          Copy-Item -Recurse web-tourism/dist-prod windows/web
+          cd windows; npx electron-builder --win nsis --x64 --publish never
+          New-Item -ItemType Directory -Force ../instaladores | Out-Null
+          Copy-Item dist-installer/PasaporteAndino-Setup.exe ../instaladores/PasaporteAndino-Setup.exe
+      - name: EXE de staging (solo pruebas E2E)
+        run: |
+          Remove-Item -Recurse -Force windows/web, windows/dist-installer
+          Copy-Item -Recurse web-tourism/dist-staging windows/web
+          cd windows; npx electron-builder --win nsis --x64 --publish never
+          Copy-Item dist-installer/PasaporteAndino-Setup.exe ../instaladores/PasaporteAndino-Staging-Setup.exe
+      - name: Backend de staging (PHP 8.4 + MariaDB) en Windows
+        run: |
+          $env:PA_STORAGE_DIR = "$env:RUNNER_TEMP\pa-storage"
+          cd backend-integration; composer install --no-interaction --no-progress --no-dev
+          php bin/migrate.php up; php bin/seed.php base; php bin/seed.php demo; cd ..
+          Start-Process php -ArgumentList '-S','127.0.0.1:8080','scripts/staging-router.php' -RedirectStandardOutput "$env:RUNNER_TEMP\php.log" -RedirectStandardError "$env:RUNNER_TEMP\php-err.log"
+          Start-Sleep 3; Invoke-RestMethod http://127.0.0.1:8080/pasaporte/api/v1/salud
+      - name: Instalar (silencioso), E2E, desinstalar — staging
+        run: |
+          New-Item -ItemType Directory -Force qa/logs | Out-Null
+          $log = "qa/logs/windows-instalacion.txt"
+          $p = Start-Process instaladores/PasaporteAndino-Staging-Setup.exe -ArgumentList '/S' -Wait -PassThru
+          "instalador staging exit=$($p.ExitCode)" | Tee-Object -FilePath $log -Append
+          $dir = "$env:LOCALAPPDATA\Programs\pasaporte-andino-desktop"
+          $exe = Join-Path $dir 'Pasaporte Andino.exe'
+          "exe existe: $(Test-Path $exe)" | Tee-Object -FilePath $log -Append
+          "acceso escritorio: $(Test-Path "$env:USERPROFILE\Desktop\Pasaporte Andino.lnk")" | Tee-Object -FilePath $log -Append
+          "acceso menú inicio: $(Test-Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Pasaporte Andino.lnk")" | Tee-Object -FilePath $log -Append
+          $un = Get-ChildItem HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall | Get-ItemProperty | Where-Object DisplayName -like 'Pasaporte Andino*'
+          "registro desinstalación: $($un.DisplayName) $($un.DisplayVersion) $($un.Publisher)" | Tee-Object -FilePath $log -Append
+          (Get-Item $exe).VersionInfo | Format-List ProductName,FileDescription,ProductVersion,CompanyName | Out-String | Tee-Object -FilePath $log -Append
+          npm i --no-save --prefix qa/e2e playwright@1.56.1; Copy-Item -Recurse qa/e2e/node_modules ./node_modules
+          $env:PA_STORAGE_DIR = "$env:RUNNER_TEMP\pa-storage"
+          node qa/e2e/windows.cjs $exe qa/capturas/windows
+          $e2e = $LASTEXITCODE
+          "e2e exit=$e2e" | Tee-Object -FilePath $log -Append
+          Get-Process 'Pasaporte Andino' -ErrorAction SilentlyContinue | Stop-Process -Force
+          $u = Start-Process (Join-Path $dir 'Uninstall Pasaporte Andino.exe') -ArgumentList '/S' -Wait -PassThru
+          Start-Sleep 5
+          "desinstalador exit=$($u.ExitCode)" | Tee-Object -FilePath $log -Append
+          "tras desinstalar - exe existe: $(Test-Path $exe); acceso escritorio: $(Test-Path "$env:USERPROFILE\Desktop\Pasaporte Andino.lnk")" | Tee-Object -FilePath $log -Append
+          if ($e2e -ne 0 -or (Test-Path $exe)) { exit 1 }
+      - name: Instalar EXE de producción, primer arranque, desinstalar
+        run: |
+          $log = "qa/logs/windows-instalacion.txt"
+          $p = Start-Process instaladores/PasaporteAndino-Setup.exe -ArgumentList '/S' -Wait -PassThru
+          "instalador producción exit=$($p.ExitCode)" | Tee-Object -FilePath $log -Append
+          $dir = "$env:LOCALAPPDATA\Programs\pasaporte-andino-desktop"; $exe = Join-Path $dir 'Pasaporte Andino.exe'
+          @'
+          const { _electron } = require('playwright');
+          (async () => { const app = await _electron.launch({ executablePath: process.argv[2] });
+            const p = await app.firstWindow(); await p.waitForFunction(() => window.__paReady === true, null, { timeout: 60000 });
+            await p.waitForTimeout(3000); await p.screenshot({ path: 'qa/capturas/windows/40-produccion-primer-arranque.png' });
+            console.log('produccion url', p.url()); await app.close(); })().catch((e) => { console.error(e); process.exit(1); });
+          '@ | Set-Content qa/e2e/prod-win.cjs
+          node qa/e2e/prod-win.cjs $exe | Tee-Object -FilePath $log -Append
+          $r = $LASTEXITCODE
+          Start-Process (Join-Path $dir 'Uninstall Pasaporte Andino.exe') -ArgumentList '/S' -Wait; Start-Sleep 5
+          "producción tras desinstalar - exe existe: $(Test-Path $exe)" | Tee-Object -FilePath $log -Append
+          Get-FileHash instaladores/*.exe -Algorithm SHA256 | Format-Table -AutoSize | Out-String -Width 300 | Tee-Object -FilePath qa/logs/sha256-exe.txt
+          if ($r -ne 0 -or (Test-Path $exe)) { exit 1 }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows
+          path: |
+            instaladores/*.exe
+            qa/capturas/windows
+            qa/logs

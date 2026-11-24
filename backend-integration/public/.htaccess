@@ -1,0 +1,10 @@
+# Apache: todo el tráfico de /pasaporte/api pasa por index.php
+Options -Indexes
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.php [QSA,L]
+</IfModule>
+<FilesMatch "\.(env|sql|md|json|lock)$">
+  Require all denied
+</FilesMatch>

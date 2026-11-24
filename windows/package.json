@@ -1,0 +1,69 @@
+{
+  "name": "pasaporte-andino-desktop",
+  "productName": "Pasaporte Andino",
+  "version": "1.0.0",
+  "description": "Pasaporte Andino — Cultura Educa 360 (edición turística para Windows)",
+  "author": "Cultura Educa 360",
+  "private": true,
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win nsis --x64 --publish never"
+  },
+  "build": {
+    "appId": "net.aprep.region.pasaporteandino",
+    "productName": "Pasaporte Andino",
+    "copyright": "Cultura Educa 360",
+    "directories": {
+      "output": "dist-installer",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "web",
+        "to": "web",
+        "filter": [
+          "**/*",
+          "!demo-media/**"
+        ]
+      }
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "PasaporteAndino-Setup.${ext}",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Pasaporte Andino",
+      "uninstallDisplayName": "Pasaporte Andino",
+      "deleteAppDataOnUninstall": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "language": "3082",
+      "license": "build/licencia.txt"
+    }
+  },
+  "devDependencies": {
+    "electron": "35.7.5",
+    "electron-builder": "25.1.8"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Pasaporte Andino",
+  "short_name": "Pasaporte Andino",
+  "start_url": "./#/inicio",
+  "display": "standalone",
+  "background_color": "#5a0a24",
+  "theme_color": "#5a0a24",
+  "lang": "es",
+  "icons": [{ "src": "assets/marca/logo-pasaporte-andino.png", "sizes": "512x341", "type": "image/png" }]
+}

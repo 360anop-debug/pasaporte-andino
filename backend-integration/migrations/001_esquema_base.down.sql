@@ -1,0 +1,22 @@
+-- Reversión de 001. ATENCIÓN: elimina datos del módulo turístico (solo tablas pa_*). Hacer backup antes.
+DROP TABLE IF EXISTS pa_rate_limit;
+DROP TABLE IF EXISTS pa_auditoria;
+DROP TABLE IF EXISTS pa_lectura_progreso;
+DROP TABLE IF EXISTS pa_album_fotos;
+DROP TABLE IF EXISTS pa_checkin_codigos;
+DROP TABLE IF EXISTS pa_visitas;
+DROP TABLE IF EXISTS pa_sellos_obtenidos;
+DROP TABLE IF EXISTS pa_sellos;
+DROP TABLE IF EXISTS pa_monedas_movimientos;
+DROP TABLE IF EXISTS pa_reglas;
+DROP TABLE IF EXISTS pa_eventos;
+DROP TABLE IF EXISTS pa_pasaportes;
+DROP TABLE IF EXISTS pa_sesiones;
+DROP TABLE IF EXISTS pa_usuarios;
+DROP TABLE IF EXISTS pa_ruta_destinos;
+DROP TABLE IF EXISTS pa_rutas;
+DROP TABLE IF EXISTS pa_contenidos;
+DROP TABLE IF EXISTS pa_lectura_capitulos;
+DROP TABLE IF EXISTS pa_lecturas;
+DROP TABLE IF EXISTS pa_destinos;
+DROP TABLE IF EXISTS pa_territorios;

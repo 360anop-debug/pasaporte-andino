@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 560" role="img" aria-labelledby="title desc">
+<title id="title">Insignia de ruta turística — Pasaporte Andino</title>
+<desc id="desc">Emblema vectorial de brújula dorada, sendero por montañas, pin de ubicación y detalles textiles andinos.</desc>
+<defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FFF2A3"/><stop offset=".25" stop-color="#E9AB24"/><stop offset=".55" stop-color="#FFD65E"/><stop offset=".8" stop-color="#B97308"/><stop offset="1" stop-color="#FFF3AF"/></linearGradient>
+ <linearGradient id="burg" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#92082E"/><stop offset="1" stop-color="#4C0921"/></linearGradient>
+ <linearGradient id="land" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8DD1F7"/><stop offset=".5" stop-color="#E0F4FD"/><stop offset=".5" stop-color="#8EBE6A"/><stop offset="1" stop-color="#23673F"/></linearGradient>
+ <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%"><feDropShadow dx="0" dy="9" stdDeviation="9" flood-color="#3A1B12" flood-opacity=".35"/></filter>
+ <clipPath id="window"><circle cx="256" cy="243" r="155"/></clipPath>
+</defs>
+<g filter="url(#shadow)">
+ <path d="M256 7 283 66 256 92 229 66Z M256 479 283 506 256 553 229 506Z M8 255 71 229 98 255 71 281Z M504 255 441 229 414 255 441 281Z" fill="url(#gold)" stroke="#9A540C" stroke-width="5"/>
+ <circle cx="256" cy="255" r="221" fill="url(#gold)" stroke="#9B5C13" stroke-width="7"/>
+ <circle cx="256" cy="255" r="199" fill="url(#burg)" stroke="#FFDB6F" stroke-width="5"/>
+ <circle cx="256" cy="255" r="175" fill="url(#gold)"/>
+ <circle cx="256" cy="243" r="160" fill="url(#land)"/>
+ <g clip-path="url(#window)">
+ <path d="M88 270 150 186 195 225 265 116 340 206 379 173 444 278Z" fill="#517B56" stroke="#173D31" stroke-width="4"/>
+ <path d="M147 189 169 210 195 225 265 116 302 171 340 206 379 173 419 225 379 211 340 230 297 185 263 146 217 248 182 240Z" fill="#D8F0EB"/>
+ <path d="M96 298 Q168 247 237 301 T419 275 L419 437 96 437Z" fill="#6BA64D"/>
+ <path d="M220 410 Q360 350 270 319 T281 238" fill="none" stroke="#A96B36" stroke-width="48" stroke-linecap="round"/>
+ <path d="M220 410 Q360 350 270 319 T281 238" fill="none" stroke="#FFF0C3" stroke-width="32" stroke-linecap="round"/>
+ <path d="M122 365 143 305 167 305 173 339 191 339 191 366Z" fill="#A17D4B" stroke="#4D3927" stroke-width="4"/>
+ <path d="M122 329h46 M140 304v60 M174 342v24" stroke="#5A432E" stroke-width="4"/>
+ </g>
+ <circle cx="256" cy="243" r="160" fill="none" stroke="#FFF0AA" stroke-width="7"/>
+ <g transform="translate(346 250)"><path d="M0 58 Q-46 0 -46 -31 A46 46 0 1 1 46 -31 Q46 0 0 58Z" fill="#AA123A" stroke="url(#gold)" stroke-width="8"/><circle cy="-31" r="18" fill="#FFF8DA" stroke="#E6AF42" stroke-width="3"/></g>
+ <circle cx="256" cy="413" r="77" fill="url(#gold)" stroke="#8E4E11" stroke-width="6"/>
+ <circle cx="256" cy="413" r="60" fill="#F1C156" stroke="#FFF1A6" stroke-width="3"/>
+ <g transform="translate(256 413)"><path d="M0 -57 13 -13 55 0 13 13 0 57 -13 13 -55 0 -13 -13Z" fill="#8A0B2A" stroke="#985919" stroke-width="2"/><path d="M0 -55 13 -13 0 0 -13 -13Z M0 55 13 13 0 0 -13 13Z M55 0 13 13 0 0 13 -13Z M-55 0 -13 13 0 0 -13 -13Z" fill="#FFF0BE"/><circle r="8" fill="url(#gold)"/></g>
+ <path d="M153 472 Q256 520 359 472 L370 501 Q256 557 142 501Z" fill="url(#burg)" stroke="url(#gold)" stroke-width="8"/>
+ <path d="M172 496l14 -10 14 10 14 -10 14 10 14 -10 14 10 14 -10 14 10 14 -10 14 10 14 -10 14 10" fill="none" stroke="#F6C03D" stroke-width="6"/>
+</g></svg>

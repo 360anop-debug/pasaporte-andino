@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php" colors="true" failOnWarning="true" failOnRisky="true" cacheDirectory=".phpunit.cache">
+  <testsuites>
+    <testsuite name="api"><directory>tests</directory></testsuite>
+  </testsuites>
+  <php>
+    <env name="PA_ENV" value="test"/>
+    <env name="PA_SHOW_DEMO" value="1"/>
+    <env name="PA_SECRET" value="test-secret-0123456789-abcdefghijklmnop"/>
+    <env name="PA_MIN_READING_SECONDS" value="0"/>
+    <env name="PA_COOKIE_SECURE" value="0"/>
+  </php>
+</phpunit>

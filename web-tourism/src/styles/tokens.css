@@ -1,0 +1,47 @@
+/* Tokens extraídos por muestreo de las referencias (ver docs/SISTEMA_VISUAL en MATRIZ_FIDELIDAD_VISUAL.md) */
+:root {
+  --burgundy-950: #2e030f;
+  --burgundy-900: #3d0414;
+  --burgundy-800: #55081f;
+  --burgundy-700: #670b2a;   /* 03 cabecera */
+  --burgundy-600: #7b0027;   /* 06 CTA */
+  --burgundy-500: #8a0728;   /* 03 nav activo */
+  --burgundy-400: #a3163a;
+  --gold-100: #fff6c2;
+  --gold-200: #ffe7a0;
+  --gold-300: #fce04f;       /* 07 moneda */
+  --gold-400: #f5c542;
+  --gold-500: #e0a52e;
+  --gold-600: #b8761a;
+  --gold-700: #8a5410;
+  --cream-50: #fffaf0;
+  --cream-100: #fff3dc;
+  --cream-200: #fcefd2;
+  --tile: #fcd993;           /* 03 tarjeta crema */
+  --parchment: #f9e6cc;      /* 02 formulario */
+  --parchment-2: #f3dcb3;
+  --parchment-3: #e9c98f;
+  --ink: #4d1e1a;            /* 07 títulos */
+  --ink-soft: #6e3b2c;
+  --ink-muted: #8b6450;
+  --green: #2fae2a;          /* 07 progreso */
+  --green-dark: #11a900;
+  --red-pin: #d3242f;
+  --white: #fff;
+  --focus: #ffd34d;
+  --gold-grad: linear-gradient(180deg, #fff6c2 0%, #f8d769 30%, #e3a630 58%, #b8761a 78%, #f6d47b 100%);
+  --gold-border: linear-gradient(135deg, #fff0ad, #df9e28 25%, #ffe08d 50%, #aa6111 80%, #f9ca62);
+  --burgundy-grad: linear-gradient(180deg, #86123a 0%, #670b2a 45%, #4a061d 100%);
+  --cream-grad: linear-gradient(180deg, #fff6df 0%, #fde6b0 55%, #f3cf86 100%);
+  --radius-s: 10px;
+  --radius: 16px;
+  --radius-l: 22px;
+  --shadow-card: 0 2px 0 rgba(255, 255, 255, .5) inset, 0 -2px 0 rgba(140, 80, 20, .25) inset, 0 6px 14px rgba(40, 4, 14, .35);
+  --shadow-soft: 0 4px 12px rgba(40, 4, 14, .25);
+  --font-display: 'Alegreya', Georgia, 'Times New Roman', serif;
+  --font-caps: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --font-ui: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --nav-h: 74px;
+}

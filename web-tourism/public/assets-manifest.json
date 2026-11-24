@@ -1,0 +1,611 @@
+{
+ "generado_desde": "KIT_MAESTRO_1.0",
+ "advertencias": [
+  "Las imágenes son recreaciones artísticas, NO fotografías documentales.",
+  "Algunos SVG son interpretaciones vectoriales simplificadas de recursos PNG, no calcos exactos.",
+  "No utilizar composiciones de pantalla como fondos estáticos para simular interfaces.",
+  "Consultar el estado provisional de determinadas tarjetas y verificar el patrimonio real antes de publicar."
+ ],
+ "archivos": [
+  {
+   "archivo": "assets/fondos_texturas/patron-textil.svg",
+   "origen_kit": "assets/fondos_texturas/patron-textil.svg",
+   "sha256_origen": "c2a6e5f4d4fa2739d6eb20e4b820225f9af519f852359739a77565deec3edf82",
+   "derivacion": "copia exacta",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "c2a6e5f4d4fa2739d6eb20e4b820225f9af519f852359739a77565deec3edf82",
+   "bytes": 911
+  },
+  {
+   "archivo": "assets/fondos_texturas/fondo-bienvenida.webp",
+   "origen_kit": "assets/fondos_texturas/fondo-bienvenida.webp",
+   "sha256_origen": "14ed076a56fecf3b99fb87502df980a72c3258d002571a8cdb55d4bd9bcdd526",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "69a622f3b5b7aa0525342d40d2a5db98a15b84d81cda81f7e88ef8eabc360126",
+   "bytes": 160656
+  },
+  {
+   "archivo": "assets/fondos_texturas/fondo-interior.webp",
+   "origen_kit": "assets/fondos_texturas/fondo-interior.webp",
+   "sha256_origen": "cf6a42aa1c37e7ee8ad151174be748c38a9b3667e1ae786220d70e94735b3710",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "d997a048aa34f7d6b849c6bdf707c28df16e10315574cbf4c2d7dd0e28b9334a",
+   "bytes": 145846
+  },
+  {
+   "archivo": "assets/fondos_texturas/textura-pergamino.webp",
+   "origen_kit": "assets/fondos_texturas/textura-pergamino.webp",
+   "sha256_origen": "22e0429f7aa228dafd040152230b6b56e229959ac5f9a2b86e05d269b97bff2e",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "8d534c8a1de4cfc8522afd174d052ccacfe0f41f3b73b0fc6de24f7ca559764f",
+   "bytes": 102448
+  },
+  {
+   "archivo": "assets/personajes/llama-recompensas.webp",
+   "origen_kit": "assets/personajes/llama-recompensas.webp",
+   "sha256_origen": "9fa977b1a3c237807aa40e0389f1d2f3494246fdbe72ab35de29232fe1a151da",
+   "derivacion": "halo residual eliminado (limpiar_halo_personajes.py)",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "d1282119407f77d2c3ad9375dd1695e47b218f3e1d45f31ff613bdae6b714370",
+   "bytes": 37074
+  },
+  {
+   "archivo": "assets/personajes/atahualpa-delia.webp",
+   "origen_kit": "assets/personajes/atahualpa-delia.webp",
+   "sha256_origen": "626eda4c19903fe8bfad23e2b328e6b6dcde1fe2d4a97feb562ca9c34f93bb05",
+   "derivacion": "halo residual eliminado (limpiar_halo_personajes.py)",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "f85a2efb7cc11cbfe4351e8ae1e3f14660b10c964ad9c7b37811e274454a7f26",
+   "bytes": 63492
+  },
+  {
+   "archivo": "assets/personajes/delia-guia.webp",
+   "origen_kit": "assets/personajes/delia-guia.webp",
+   "sha256_origen": "5fcbd53d7243a7f3c7be8953ac52b127fc4a19cee0c76628bb974f6dc0bab647",
+   "derivacion": "halo residual eliminado (limpiar_halo_personajes.py)",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "263cbde1f0ff5aaad48b73212f70252b6f832c37187481f3457ca578704d227c",
+   "bytes": 35506
+  },
+  {
+   "archivo": "assets/personajes/atahualpa-guia.webp",
+   "origen_kit": "assets/personajes/atahualpa-guia.webp",
+   "sha256_origen": "50a63a4332e54d9eb02ab4962628bc85223d3ac3fc94a37f42aef6bacfc898b0",
+   "derivacion": "halo residual eliminado (limpiar_halo_personajes.py)",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "2bec32f51f97e971e7565e1e608227688c0ed902844315cce8daa04bd1d31cbf",
+   "bytes": 37130
+  },
+  {
+   "archivo": "assets/album/sello-celendin.svg",
+   "origen_kit": "assets/album/sello-celendin.svg",
+   "sha256_origen": "9ebd93510219dd5ec191177d3b887267c0f46cf7d420f8c5aaed22a17e914074",
+   "derivacion": "copia exacta",
+   "estado": "vector simplificado",
+   "notas": "SVG vectorial simplificado, reproducible y editable; original detallado en carpeta originales_png",
+   "sha256": "9ebd93510219dd5ec191177d3b887267c0f46cf7d420f8c5aaed22a17e914074",
+   "bytes": 1086
+  },
+  {
+   "archivo": "assets/album/marco-polaroid.svg",
+   "origen_kit": "assets/album/marco-polaroid.svg",
+   "sha256_origen": "b71fee12d614b82bd799acff8982b33a4d053b52b70ce28d4436984bc93a897c",
+   "derivacion": "copia exacta",
+   "estado": "vector simplificado",
+   "notas": "SVG vectorial editable y hueco central realmente transparente; simplificación de la imagen PNG de referencia",
+   "sha256": "b71fee12d614b82bd799acff8982b33a4d053b52b70ce28d4436984bc93a897c",
+   "bytes": 627
+  },
+  {
+   "archivo": "assets/album/portada-album.webp",
+   "origen_kit": "assets/album/portada-album.webp",
+   "sha256_origen": "fd718cd1404526a8f94407f49f0706716b698aa348777b82f214025fd7a9fc00",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "provisional",
+   "notas": "Portada alternativa de pasaporte; el original visual específico del álbum no estaba disponible con nombre inequívoco",
+   "sha256": "4610e52c93a5dcf7718c6ea27c145c553ad149bbc220f09254efe61d6aae5319",
+   "bytes": 369522
+  },
+  {
+   "archivo": "assets/album/medalla-album.webp",
+   "origen_kit": "assets/album/medalla-album.webp",
+   "sha256_origen": "512632f540e9d8f78f869361d80124f7b7ea98b686f2f4b38df2c838c64f5d10",
+   "derivacion": "alfa generado (fondo negro eliminado) y escalado a 640px",
+   "estado": "listo",
+   "notas": "",
+   "sha256": "9d5907da8cb529cb853bbf08ca72a2e8d162bb808deb633a234b0cfc84c374a5",
+   "bytes": 187496
+  },
+  {
+   "archivo": "assets/album/sello-bloqueado.svg",
+   "origen_kit": "assets/album/sello-bloqueado.svg",
+   "sha256_origen": "f4e4f2f65744ea21b89c8db5afb428aa54178be4e9cea978c7e523e7f863951b",
+   "derivacion": "copia exacta",
+   "estado": "vector simplificado",
+   "notas": "SVG vectorial simplificado, reproducible y editable; original detallado en carpeta originales_png",
+   "sha256": "f4e4f2f65744ea21b89c8db5afb428aa54178be4e9cea978c7e523e7f863951b",
+   "bytes": 1066
+  },
+  {
+   "archivo": "assets/album/pagina-album.webp",
+   "origen_kit": "assets/album/pagina-album.webp",
+   "sha256_origen": "dc43556f0762c7b07461e1455fc0bcb72282df748218960c55f869e1116950e3",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "",
+   "sha256": "fe5cc13b22540df3cc72248c2802d834283e02d7e5b02cf73b1d7f02aa7761d5",
+   "bytes": 456540
+  },
+  {
+   "archivo": "assets/album/sello-cajamarca.svg",
+   "origen_kit": "assets/album/sello-cajamarca.svg",
+   "sha256_origen": "ef921f89aa3fd054fade2b91acf4961f118dd783c4d03847e344149d456f11f9",
+   "derivacion": "copia exacta",
+   "estado": "vector simplificado",
+   "notas": "SVG vectorial simplificado, reproducible y editable; original detallado en carpeta originales_png",
+   "sha256": "ef921f89aa3fd054fade2b91acf4961f118dd783c4d03847e344149d456f11f9",
+   "bytes": 1116
+  },
+  {
+   "archivo": "assets/album/sello-banos-inca.svg",
+   "origen_kit": "assets/album/sello-banos-inca.svg",
+   "sha256_origen": "eb08007cea974278838bf9ad7ac301673ba32b008b114721fd4c9bd5c15d5d51",
+   "derivacion": "copia exacta",
+   "estado": "vector simplificado",
+   "notas": "SVG vectorial simplificado, reproducible y editable; original detallado en carpeta originales_png",
+   "sha256": "eb08007cea974278838bf9ad7ac301673ba32b008b114721fd4c9bd5c15d5d51",
+   "bytes": 1093
+  },
+  {
+   "archivo": "assets/exploracion/cabecera-explorar.webp",
+   "origen_kit": "assets/exploracion/cabecera-explorar.webp",
+   "sha256_origen": "a4222a3cea3857bfcdbea7978472bbe91b8994fe3491d98ffbcc5de6e111c27a",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "ff735910f2aaa3956c1e3814d916e806b5282277cf47ee519eda6aeb493a0319",
+   "bytes": 316474
+  },
+  {
+   "archivo": "assets/exploracion/tarjeta-cutervo.webp",
+   "origen_kit": "assets/exploracion/tarjeta-cutervo.webp",
+   "sha256_origen": "6fc5b2395444bfe138f798bcd363291325e8b5dfa9685b7bd15c0b8fe8f6cbde",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "6118375b31154266cccfebe568b7ee00827da7625e3f8d8f34e2200fa3d2752d",
+   "bytes": 511824
+  },
+  {
+   "archivo": "assets/exploracion/tarjeta-chota.webp",
+   "origen_kit": "assets/exploracion/tarjeta-chota.webp",
+   "sha256_origen": "341b9a008da8c9421fb70dea4788758d63bc88c406e892336ed291cdef3e1105",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "provisional",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "bec22dd87acefc8d7789e41c15d29e5dc5ec000533aed25aa0bc01af048fa1d7",
+   "bytes": 19778
+  },
+  {
+   "archivo": "assets/exploracion/marco-destino.svg",
+   "origen_kit": "assets/exploracion/marco-destino.svg",
+   "sha256_origen": "ea8716bc3d3be3934698d30cdc6ab623eb44c26a0f1cbd8a4eddbedf4580e53c",
+   "derivacion": "copia exacta",
+   "estado": "listo",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "ea8716bc3d3be3934698d30cdc6ab623eb44c26a0f1cbd8a4eddbedf4580e53c",
+   "bytes": 1478
+  },
+  {
+   "archivo": "assets/exploracion/tarjeta-banos-inca.webp",
+   "origen_kit": "assets/exploracion/tarjeta-banos-inca.webp",
+   "sha256_origen": "3d447d08d7930d57b71b61e573d2e79c615b8317b8f7b17ac26c027b05874501",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "62505933bcde1fb0f17ab1089ab5c87bd051e4a4d804ab9dcec9939c7ce729e5",
+   "bytes": 417068
+  },
+  {
+   "archivo": "assets/exploracion/tarjeta-cajamarca.webp",
+   "origen_kit": "assets/exploracion/tarjeta-cajamarca.webp",
+   "sha256_origen": "3493f372e16f5e31d6b1c2a93246cd34e9ad0a6056c92a1df9dba127bb989ff5",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "de58a5edfcddbb86745c57af000ade0a734ce76948f575c69d99b77f618fb39b",
+   "bytes": 482600
+  },
+  {
+   "archivo": "assets/exploracion/tarjeta-jaen.webp",
+   "origen_kit": "assets/exploracion/tarjeta-jaen.webp",
+   "sha256_origen": "ded8241f667924761bc6fd5c188b25a9b48606edeea2fa45f5fb17bb142bafae",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "provisional",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "70801c1e87eeae5388853048e02fad7b2c5af8c7b3f044369637725ce7cb1805",
+   "bytes": 32544
+  },
+  {
+   "archivo": "assets/exploracion/tarjeta-celendin.webp",
+   "origen_kit": "assets/exploracion/tarjeta-celendin.webp",
+   "sha256_origen": "443f63b814d917222971d6d63e67eeecd2d92acf7535d13bfd169b1659c4e350",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "42fa137880894f945aeba42dc71e14c5972efa9cafc3c62c93fef88f72926d12",
+   "bytes": 422402
+  },
+  {
+   "archivo": "assets/exploracion/tarjeta-san-ignacio.webp",
+   "origen_kit": "assets/exploracion/tarjeta-san-ignacio.webp",
+   "sha256_origen": "4d38615a223683d0fb8c78270ed247f07ee4bf2cfac4fc9f5547c4794001c2b6",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "provisional",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "84579794c15c7c608669d45b2873281d2c3865a2289230d8caaaab43ffdd3563",
+   "bytes": 21564
+  },
+  {
+   "archivo": "assets/exploracion/marcador-mapa.svg",
+   "origen_kit": "assets/exploracion/marcador-mapa.svg",
+   "sha256_origen": "cbb4fca4fd4123268e708c6af5f4b7960010187d6a86f2daaac6ce521f106ce6",
+   "derivacion": "copia exacta",
+   "estado": "listo",
+   "notas": "Ilustración artística; verificar autenticidad geográfica antes de describirla como fotografía real",
+   "sha256": "cbb4fca4fd4123268e708c6af5f4b7960010187d6a86f2daaac6ce521f106ce6",
+   "bytes": 1237
+  },
+  {
+   "archivo": "assets/pasaporte/marco-foto.svg",
+   "origen_kit": "assets/pasaporte/marco-foto.svg",
+   "sha256_origen": "131b6a6ba062938cc209ee52e47d44a3402434b9228c074a6a6e4c52c9ab9fe9",
+   "derivacion": "copia exacta",
+   "estado": "vector simplificado",
+   "notas": "Vector ornamental real de centro transparente; arte original disponible en originales_png",
+   "sha256": "131b6a6ba062938cc209ee52e47d44a3402434b9228c074a6a6e4c52c9ab9fe9",
+   "bytes": 752
+  },
+  {
+   "archivo": "assets/pasaporte/pagina-identidad.webp",
+   "origen_kit": "assets/pasaporte/pagina-identidad.webp",
+   "sha256_origen": "c43512b61f7606673abfe67a3c1ddefea97147e3290f2f83899ad950b6c39098",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "",
+   "sha256": "d0c461ca7e18885f664b5b5494bc87534df290c47983966b36f442a6a15e3f73",
+   "bytes": 483736
+  },
+  {
+   "archivo": "assets/pasaporte/portada-pasaporte.webp",
+   "origen_kit": "assets/pasaporte/portada-pasaporte.webp",
+   "sha256_origen": "fd718cd1404526a8f94407f49f0706716b698aa348777b82f214025fd7a9fc00",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "",
+   "sha256": "4610e52c93a5dcf7718c6ea27c145c553ad149bbc220f09254efe61d6aae5319",
+   "bytes": 369522
+  },
+  {
+   "archivo": "assets/pasaporte/sello-explorador.svg",
+   "origen_kit": "assets/pasaporte/sello-explorador.svg",
+   "sha256_origen": "21499a98cfc0fe45940aa97605c25566623c96cde5f2fe3fa7b2b4e502ed243a",
+   "derivacion": "copia exacta",
+   "estado": "vector simplificado",
+   "notas": "Vector circular auténtico simplificado, sin relleno exterior",
+   "sha256": "21499a98cfc0fe45940aa97605c25566623c96cde5f2fe3fa7b2b4e502ed243a",
+   "bytes": 922
+  },
+  {
+   "archivo": "assets/pasaporte/insignia-bienvenida.webp",
+   "origen_kit": "assets/pasaporte/insignia-bienvenida.webp",
+   "sha256_origen": "512632f540e9d8f78f869361d80124f7b7ea98b686f2f4b38df2c838c64f5d10",
+   "derivacion": "alfa generado (fondo negro eliminado) y escalado a 640px",
+   "estado": "listo",
+   "notas": "",
+   "sha256": "9d5907da8cb529cb853bbf08ca72a2e8d162bb808deb633a234b0cfc84c374a5",
+   "bytes": 187496
+  },
+  {
+   "archivo": "assets/marca/logo-pasaporte-andino.webp",
+   "origen_kit": "assets/marca/logo-pasaporte-andino.png",
+   "sha256_origen": "f2d42bd78d4f7a9a7d0aa84122c484b50ae461bf37cbd51a30d5d336f0988204",
+   "derivacion": "recorte de márgenes transparentes, webp 1000px",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "857085e8e2e0ca264b88f1bd5aae843435627b5f2b286a17488a32f301a39c81",
+   "bytes": 202562
+  },
+  {
+   "archivo": "assets/marca/logo-pasaporte-andino.png",
+   "origen_kit": "assets/marca/logo-pasaporte-andino.png",
+   "sha256_origen": "f2d42bd78d4f7a9a7d0aa84122c484b50ae461bf37cbd51a30d5d336f0988204",
+   "derivacion": "png 512px para iconos y Open Graph",
+   "estado": "listo",
+   "notas": "Fuente: tanda 01",
+   "sha256": "994e31bbe47460f9cbaf8b9e6996bd7eef413e486b507ce365b983bf4a31af3d",
+   "bytes": 284193
+  },
+  {
+   "archivo": "assets/monedas/moneda-base.webp",
+   "origen_kit": "assets/monedas/moneda-base.webp",
+   "sha256_origen": "116e888ed9d7443f73cf180817476d6b841eb4073357e8336a613a9233a5c6b3",
+   "derivacion": "alfa generado (fondo negro eliminado) y escalado a 640px",
+   "estado": "listo",
+   "notas": "Fondo transparente preservado si el original lo contiene",
+   "sha256": "d88182217e2787f536e4028e372a63e055c16f5876190bb6d66b0fed6962d5d1",
+   "bytes": 159658
+  },
+  {
+   "archivo": "assets/monedas/moneda-oculta.webp",
+   "origen_kit": "assets/monedas/moneda-oculta.webp",
+   "sha256_origen": "63b8bfe87259698972017cc053d2239554dcaf908bedb213b944054bcfe5acb1",
+   "derivacion": "alfa generado (fondo negro eliminado) y escalado a 640px",
+   "estado": "listo",
+   "notas": "Fondo transparente preservado si el original lo contiene",
+   "sha256": "75fef576e8176a47bf8a419480d2e9a0097e5f0dc4d6884b1cba62f46306d215",
+   "bytes": 136128
+  },
+  {
+   "archivo": "assets/monedas/moneda-celendin.webp",
+   "origen_kit": "assets/monedas/moneda-celendin.webp",
+   "sha256_origen": "ddc9a35fffcd0e0ab64836457bea31b657f8bddd045a6d30492bbfd916ef595b",
+   "derivacion": "alfa generado (fondo negro eliminado) y escalado a 640px",
+   "estado": "listo",
+   "notas": "La representación del edificio de Celendín es ilustrativa; revisar correspondencia patrimonial",
+   "sha256": "47530f7d0ce1e98c7de16bb30206cf07b0759bf45c953038894ec389035117f5",
+   "bytes": 189680
+  },
+  {
+   "archivo": "assets/monedas/moneda-cajamarca.webp",
+   "origen_kit": "assets/monedas/moneda-cajamarca.webp",
+   "sha256_origen": "34573bd181a7639950df93c61ee17253fef1756ee411b633962a7531ac297091",
+   "derivacion": "alfa generado (fondo negro eliminado) y escalado a 640px",
+   "estado": "listo",
+   "notas": "Fondo transparente preservado si el original lo contiene",
+   "sha256": "6cdc39a7aafeb58d5d3da1b7d0beb1e08679a8e7e9c500f5304c0a3fd0219c00",
+   "bytes": 190248
+  },
+  {
+   "archivo": "assets/monedas/medalla-coleccion.webp",
+   "origen_kit": "assets/monedas/medalla-coleccion.webp",
+   "sha256_origen": "cfc16a1173b178cd32202e45dd801af43408c85df209d53c7246b253b9d2ea29",
+   "derivacion": "alfa generado (fondo negro eliminado) y escalado a 640px",
+   "estado": "listo",
+   "notas": "Fondo transparente preservado si el original lo contiene",
+   "sha256": "0ba5b3dfd222477be9ead53c2cafef70b47de93110baf6c4fe52c23e1a34b310",
+   "bytes": 182172
+  },
+  {
+   "archivo": "assets/monedas/moneda-banos-inca.webp",
+   "origen_kit": "assets/monedas/moneda-banos-inca.webp",
+   "sha256_origen": "4e2d23b89055a04f175c2a57a15508407cf6c0655e6db32f8aa0f639bb8221d4",
+   "derivacion": "alfa generado (fondo negro eliminado) y escalado a 640px",
+   "estado": "listo",
+   "notas": "Fondo transparente preservado si el original lo contiene",
+   "sha256": "9a412570e336f6cea866592fb2352ce97803675a2741630af1d6f4bb308b3d20",
+   "bytes": 188862
+  },
+  {
+   "archivo": "assets/monedas/cofre-recompensas.webp",
+   "origen_kit": "assets/monedas/cofre-recompensas.webp",
+   "sha256_origen": "0ee3bfed4c482a3419297e7d794607cce9faa7e2f8de415672dacc644a33e64a",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Fondo transparente preservado si el original lo contiene",
+   "sha256": "e03b8e2d6f58fd6e3bfd5d18a3b638eedb063ef0887da0c8f517bd867492f23f",
+   "bytes": 156718
+  },
+  {
+   "archivo": "assets/cultura/biblioteca-cultural.webp",
+   "origen_kit": "assets/cultura/biblioteca-cultural.webp",
+   "sha256_origen": "cbb47232a9968a47121f94bd70333809f921a769b10348a5ca4f22c6e5983f23",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Recreación artística; no evidencia histórica documental",
+   "sha256": "707513ee73b4168f30b2b51d2f341b189dc0124a142ede380ba4bc7bee9ef677",
+   "bytes": 330390
+  },
+  {
+   "archivo": "assets/cultura/portada-leyendas.webp",
+   "origen_kit": "assets/cultura/portada-leyendas.webp",
+   "sha256_origen": "14be07d0396a8e40db1850177f7763fed98719473abf87d2f239f4d7db3e02f2",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Recreación artística; no evidencia histórica documental",
+   "sha256": "8324e3d320581cddf70b3ca8dc0b3989d69e3d4df7e6c8f19eac14a6fd9d567d",
+   "bytes": 116136
+  },
+  {
+   "archivo": "assets/cultura/portada-video.webp",
+   "origen_kit": "assets/cultura/portada-video.webp",
+   "sha256_origen": "a11e63c126e06ba3954a5f273dfa10d1f5f3825bdb1c641b98097c81f0e57db8",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Recreación artística; no evidencia histórica documental",
+   "sha256": "123985f3ce6f6e6e93dbb4f68c27406492ddc145386c4eb74c5be170ce7a4e9a",
+   "bytes": 206174
+  },
+  {
+   "archivo": "assets/cultura/marco-referencia.svg",
+   "origen_kit": "assets/cultura/marco-referencia.svg",
+   "sha256_origen": "d042d402abd66c60327299fe4fc6f3d11bd1375cb595da4d1419a12f1dec831f",
+   "derivacion": "copia exacta",
+   "estado": "listo",
+   "notas": "Recreación artística; no evidencia histórica documental",
+   "sha256": "d042d402abd66c60327299fe4fc6f3d11bd1375cb595da4d1419a12f1dec831f",
+   "bytes": 1209
+  },
+  {
+   "archivo": "assets/cultura/cabecera-historia.webp",
+   "origen_kit": "assets/cultura/cabecera-historia.webp",
+   "sha256_origen": "e7cf094be4f2c8c47a797f85480412099a061c5e944500e5a98c58224f58c536",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Recreación artística; no evidencia histórica documental",
+   "sha256": "1ef94ecd7f63405d3298e349b2c35ce51993cb5cee4106b80de622b59b0193f9",
+   "bytes": 195282
+  },
+  {
+   "archivo": "assets/cultura/marco-audio.svg",
+   "origen_kit": "assets/cultura/marco-audio.svg",
+   "sha256_origen": "0ef34b00c2f4e3142c1387a39c10739c40ab1d6f4dfe2121ed9f1242cbd159a2",
+   "derivacion": "copia exacta",
+   "estado": "listo",
+   "notas": "Recreación artística; no evidencia histórica documental",
+   "sha256": "0ef34b00c2f4e3142c1387a39c10739c40ab1d6f4dfe2121ed9f1242cbd159a2",
+   "bytes": 1345
+  },
+  {
+   "archivo": "assets/rutas/insignia-ruta.svg",
+   "origen_kit": "assets/rutas/insignia-ruta.svg",
+   "sha256_origen": "88f1c3f677b7692898ed3a5a1938b845e4713af75556985dfa09e7bbfef73078",
+   "derivacion": "copia exacta",
+   "estado": "listo",
+   "notas": "Recreación artística de rutas o paisajes; se recomienda validar atractivos y geografía",
+   "sha256": "88f1c3f677b7692898ed3a5a1938b845e4713af75556985dfa09e7bbfef73078",
+   "bytes": 3568
+  },
+  {
+   "archivo": "assets/rutas/ruta-natural.webp",
+   "origen_kit": "assets/rutas/ruta-natural.webp",
+   "sha256_origen": "b14287da1e110ea298cef8283873d38d9b85db2778654ec2252ff62814422c17",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Recreación artística de rutas o paisajes; se recomienda validar atractivos y geografía",
+   "sha256": "ec90b606c63568d75263ded9f528be4889cc548571e103491b2a8a1fc0de8874",
+   "bytes": 450000
+  },
+  {
+   "archivo": "assets/rutas/ruta-bienestar.webp",
+   "origen_kit": "assets/rutas/ruta-bienestar.webp",
+   "sha256_origen": "04f234ba47615029334be30e320860c8ca4e288ce1d05ca7fe61c5332b8c34be",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Recreación artística de rutas o paisajes; se recomienda validar atractivos y geografía",
+   "sha256": "d16c65779ce34673edce29f8a48e06b2966be3a17731b43ec815b1464778f026",
+   "bytes": 301488
+  },
+  {
+   "archivo": "assets/rutas/ruta-historica.webp",
+   "origen_kit": "assets/rutas/ruta-historica.webp",
+   "sha256_origen": "a50b53e0991842d5eec6469b001e7b506f21716abe6bf16c40ebe18419217144",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Recreación artística de rutas o paisajes; se recomienda validar atractivos y geografía",
+   "sha256": "dd0ff51377fdb49065ae074aeaa3171b6f812a74ef74ace918408a0b7235d033",
+   "bytes": 468552
+  },
+  {
+   "archivo": "assets/rutas/ruta-cultural.webp",
+   "origen_kit": "assets/rutas/ruta-cultural.webp",
+   "sha256_origen": "e3d7e1c670559c0cd4ab2d52817cfca858dc257530e770c9365fd478038bb053",
+   "derivacion": "optimizado webp q88, máx 1400px",
+   "estado": "listo",
+   "notas": "Recreación artística de rutas o paisajes; se recomienda validar atractivos y geografía",
+   "sha256": "caeb5197278602570e919e99c3cda43579ef971e67376eaadd3378a3457f25d3",
+   "bytes": 322316
+  },
+  {
+   "archivo": "assets/sellos/sello-cajamarca.webp",
+   "origen_kit": "originales_png/sello_turístico_de_cajamarca.png",
+   "sha256_origen": "b40d99942398d71001dc6cdad5a96bf8614d9e29932d8845ba41048083c13777",
+   "derivacion": "recorte y webp 480px",
+   "estado": "maestro raster",
+   "notas": "Referencia fiel para recreación y exportaciones; SVG editables son versiones geométricas",
+   "sha256": "e09aa080ac3b3a43fcdebbfbef1158e28171d1f8b75d473dbf7b7741b9c4c7cd",
+   "bytes": 74992
+  },
+  {
+   "archivo": "assets/sellos/sello-banos-inca.webp",
+   "origen_kit": "originales_png/sello_andino_de_baños_del_inca.png",
+   "sha256_origen": "7afc3ad98c4dedb4f5f3dbeb4dfba8b7bab038949545716e1abe305915e93a74",
+   "derivacion": "recorte y webp 480px",
+   "estado": "maestro raster",
+   "notas": "Referencia fiel para recreación y exportaciones; SVG editables son versiones geométricas",
+   "sha256": "11848ff65a586415127ca76e425cd927b74708f26a8912b689af428be41ed02a",
+   "bytes": 74246
+  },
+  {
+   "archivo": "assets/sellos/sello-celendin.webp",
+   "origen_kit": "originales_png/sello_turístico_pasaporte_andino_de_celendín.png",
+   "sha256_origen": "85c3418511a7cc4c0493215d5194df4ab7d11664c87644582dde5e21cdbf9eb9",
+   "derivacion": "recorte y webp 480px",
+   "estado": "maestro raster",
+   "notas": "Referencia fiel para recreación y exportaciones; SVG editables son versiones geométricas",
+   "sha256": "ac7663783b025c2ebf045ae8937865ebd11faf0c911c0771fb107ed421e13f03",
+   "bytes": 84752
+  },
+  {
+   "archivo": "assets/sellos/sello-bloqueado.webp",
+   "origen_kit": "originales_png/sello_gris_de_pasaporte_andino.png",
+   "sha256_origen": "6134593cdf100d00c1cb02ab0e83973f3e092912fc06c4a88284cb5edc8b5c1d",
+   "derivacion": "recorte y webp 480px",
+   "estado": "maestro raster",
+   "notas": "Referencia fiel para recreación y exportaciones; SVG editables son versiones geométricas",
+   "sha256": "923dba648291ec72074a71c63b2dadf922632851bca1eebce27a68df6f08fffb",
+   "bytes": 37764
+  },
+  {
+   "archivo": "assets/pasaporte/portada-detalle.webp",
+   "origen_kit": "originales_png/portada_andina_de_lujo.png",
+   "sha256_origen": "57c0a02e58b28dd852483b2b1173e37622503bf235b1ae0c677bd1feea093f25",
+   "derivacion": "derivado webp",
+   "estado": "listo",
+   "notas": "Cubierta ilustrada original del álbum con ornamento dorado",
+   "sha256": "6bdb120898f114358d9c8888aeab4a5305ff5d2d9c2bc06751fd302ae8735d2c",
+   "bytes": 309626
+  },
+  {
+   "archivo": "assets/album/album-parches.webp",
+   "origen_kit": "originales_png/álbum_andino_de_parches_dorados.png",
+   "sha256_origen": "7aad65a5ec8ccc1955073836c11f0caf54c2f9b3ee429205d20c3b8846d37b8f",
+   "derivacion": "derivado webp",
+   "estado": "maestro raster",
+   "notas": "Original de mayor resolución; conserve para fidelidad visual",
+   "sha256": "5f4f57fb791683cc13648583f8a9d0da6722259e2467ddcd2c26b336b6651cd1",
+   "bytes": 365700
+  },
+  {
+   "archivo": "assets/album/marco-polaroid.webp",
+   "origen_kit": "originales_png/marco_polaroid_vintage_vacío.png",
+   "sha256_origen": "1bc98ef1a99234877922b507703567ed4d239ce88fa5aeff0d4907f39ab6bde0",
+   "derivacion": "derivado webp",
+   "estado": "maestro raster",
+   "notas": "Referencia fiel para recreación y exportaciones; SVG editables son versiones geométricas",
+   "sha256": "97b148bb616592416c581ca87aa93ccb3e2ddd5dcf6d21c339a086710b7f3eac",
+   "bytes": 74936
+  },
+  {
+   "archivo": "assets/monedas/medallon.webp",
+   "origen_kit": "originales_png/medallón_dorado_del_pasaporte_andino.png",
+   "sha256_origen": "59ceab83a42b52bd3c2a9b10ee9fc7701f3009b47f416c3d049dacfb8d284e06",
+   "derivacion": "derivado webp con alfa",
+   "estado": "maestro raster",
+   "notas": "Original de mayor resolución; conserve para fidelidad visual",
+   "sha256": "00967bc4a8cdd8f5d0e1cb7ecad375a81a69cd3f96b90acb7f699b8e74b65007",
+   "bytes": 172244
+  },
+  {
+   "archivo": "assets/pasaporte/grabado-identidad.webp",
+   "origen_kit": "assets/pasaporte/pagina-identidad.webp",
+   "sha256_origen": "c43512b61f7606673abfe67a3c1ddefea97147e3290f2f83899ad950b6c39098",
+   "derivacion": "recorte del grabado inferior (ruinas y montañas)",
+   "estado": "listo",
+   "notas": "",
+   "sha256": "87267cbd6f4e6fd2289c6c23451f9a282219e653f8ea27d3b9a4e0aac17962ca",
+   "bytes": 58544
+  }
+ ]
+}

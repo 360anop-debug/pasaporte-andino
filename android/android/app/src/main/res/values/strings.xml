@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Pasaporte Andino</string>
+    <string name="title_activity_main">Pasaporte Andino</string>
+    <string name="package_name">net.aprep.region.pasaporteandino</string>
+    <string name="custom_url_scheme">net.aprep.region.pasaporteandino</string>
+</resources>

@@ -1,0 +1,16 @@
+{
+  "name": "pasaporte-andino-android",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Contenedor Android (Capacitor) de la edición turística Pasaporte Andino",
+  "scripts": {
+    "sync": "cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "7.4.2",
+    "@capacitor/app": "7.0.2",
+    "@capacitor/cli": "7.4.2",
+    "@capacitor/core": "7.4.2",
+    "@capacitor/share": "7.0.2"
+  }
+}

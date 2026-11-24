@@ -1,0 +1,57 @@
+/* =================== Tablet: columna centrada, sin estirar el móvil =================== */
+@media (min-width: 640px) {
+  body { background: url('/assets/fondos_texturas/patron-textil.svg') repeat center / 220px auto, var(--burgundy-900); }
+  .stage { max-width: 720px; margin: 0 auto; box-shadow: 0 0 40px rgba(0, 0, 0, .6); }
+  .bottom-nav { max-width: 720px; margin: 0 auto; }
+  .district-grid { grid-template-columns: repeat(3, 1fr); }
+  .home-hero { height: 560px; }
+  .welcome-hero { height: 520px; }
+  .welcome-ata { height: 480px; } .welcome-delia { height: 360px; }
+  .register-card { max-width: 560px; margin-left: auto; margin-right: auto; }
+  .coin-grid, .stamp-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* =================== Escritorio (Windows/web ancho): navegación lateral + panel de resumen =================== */
+@media (min-width: 1024px) {
+  .shell.with-chrome { display: grid; grid-template-columns: 250px minmax(0, 1fr) 330px; min-height: 100vh; }
+  .shell.with-chrome .stage { max-width: 860px; width: 100%; margin: 0 auto; }
+  .with-chrome .bottom-nav { display: none; }
+  .with-chrome .screen { padding-bottom: 24px; }
+  .side-nav {
+    display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; overflow: auto; padding: 16px 12px;
+    background: var(--burgundy-grad); border-right: 2px solid var(--gold-500); box-shadow: 6px 0 20px rgba(0, 0, 0, .4);
+  }
+  .side-brand { display: block; padding: 4px 10px 14px; } .side-brand img { width: 100%; }
+  .side-item { display: flex; gap: 12px; align-items: center; padding: 11px 14px; border-radius: 14px; color: #fbe8cd; text-decoration: none; font-weight: 700; font-size: 16px; }
+  .side-item .ic { color: var(--gold-300); width: 24px; height: 24px; }
+  .side-item:hover { background: rgba(255, 255, 255, .08); }
+  .side-item.active { background: radial-gradient(120% 100% at 50% 0%, #c8203f, #8a0728 60%, #6a0620); box-shadow: 0 0 0 2px var(--gold-400); color: #fff; }
+  .side-lang { margin-top: auto; padding-top: 14px; display: flex; justify-content: center; }
+  .side-lang .lang-pill { padding: 5px 8px; font-size: 13px; }
+  .side-panel { display: flex; flex-direction: column; gap: 14px; position: sticky; top: 0; height: 100vh; overflow: auto; padding: 18px 14px; background: linear-gradient(180deg, #4a061d, #2e030f); border-left: 2px solid var(--gold-500); }
+  .aside-card { display: block; padding: 14px; border-radius: 16px; background: var(--cream-grad); box-shadow: var(--shadow-card), 0 0 0 2px #e0b25a; color: var(--ink); text-decoration: none; }
+  .aside-card h3 { margin: 0 0 6px; display: flex; gap: 8px; align-items: center; font-family: var(--font-display); color: var(--burgundy-700); font-size: 19px; }
+  .aside-card p { margin: 6px 0; }
+  .aside-id { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center; }
+  .aside-mini { width: 64px; border-radius: 6px; } .aside-id small { display: block; font-weight: 700; color: var(--ink-muted); } .aside-id b { display: block; font-size: 18px; } .aside-id code { font-weight: 800; color: var(--burgundy-600); }
+  .aside-big { font-family: var(--font-display); font-size: 40px; font-weight: 800; color: var(--burgundy-800); margin: 0 !important; }
+  .aside-cover { border-radius: 10px; margin-bottom: 10px; }
+  .aside-stamps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+  .side-panel .progress-pct { font-size: 22px; min-width: 46px; }
+  .side-panel .guide-img { width: 80px; }
+  .with-chrome .topbar .icon-btn:first-child { visibility: hidden; }
+  .with-chrome .topbar .lang-toggle { visibility: hidden; }
+  .home-hero { height: 600px; } .home-chars { max-width: 460px; width: 60%; }
+  .tiles { gap: 16px; } .tile { min-height: 170px; }
+  .district-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .no-chrome .welcome { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr .9fr; align-items: start; }
+  .no-chrome .welcome-hero { height: 100vh; position: sticky; top: 0; }
+  .no-chrome .register-card { margin: 40px 24px; }
+  .no-chrome .welcome-band { grid-column: 1 / -1; }
+  .toast { bottom: 24px; }
+  .sheet-wrap { align-items: center; } .sheet { border-radius: 22px; }
+}
+@media (min-width: 1500px) {
+  .shell.with-chrome { grid-template-columns: 280px minmax(0, 1fr) 380px; }
+  .shell.with-chrome .stage { max-width: 940px; }
+}
