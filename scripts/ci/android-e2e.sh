@@ -13,7 +13,7 @@ adb logcat -c
 adb install -r instaladores/PasaporteAndino-Android-staging.apk | tee qa/logs/android-install-staging.txt
 timeout 28m node qa/e2e/android.cjs "$OUT"; E2E=$?
 echo "== logcat (errores, WebView, Capacitor) =="
-adb logcat -d -v brief | grep -E "AndroidRuntime|chromium|cr_|Capacitor|WebView|am_proc_died|ActivityManager: (Start|Kill|Process)" | grep -vE "Accessibility" | tail -80 || true
+adb logcat -d -v brief | grep -E "AndroidRuntime|FATAL|Capacitor|pasaporteandino|am_proc_died|ActivityManager: (Start proc|Killing|Process .* has died)" | grep -vE "Accessibility|Cronet" | tail -60 || true
 adb logcat -d -s chromium:I Capacitor:V "Capacitor/Console":V AndroidRuntime:E > qa/logs/android-logcat-staging.txt || true
 adb uninstall $PKG | tee qa/logs/android-uninstall-staging.txt
 adb shell pm list packages | grep -c $PKG > qa/logs/android-tras-desinstalar.txt || true

@@ -1,6 +1,6 @@
 // E2E en emulador Android: APK de staging (WebView depurable) contra backend real en el host (10.0.2.2:8080).
 // Uso: node qa/e2e/android.cjs <outDir>
-const { _android } = require('playwright');
+const { _android, chromium } = require('playwright');
 const { execSync } = require('node:child_process');
 const fs = require('node:fs');
 const assert = require('node:assert/strict');
@@ -23,17 +23,28 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
   const extra = [];
   const check = async (name, fn) => { try { await fn(); extra.push({ paso: name, ok: true }); L('OK   ' + name); } catch (e) { extra.push({ paso: name, ok: false, error: e.message }); L('FAIL ' + name + ': ' + e.message); } };
 
-  // La WebView sustituye su página inicial (about:blank) por la app al arrancar: se re-adquiere hasta que la app está lista.
+  // Conexión por CDP: se reenvía el socket DevTools de la WebView de la app (webview_devtools_remote_<pid>)
+  // y se adjunta con chromium.connectOverCDP. Se re-detecta el PID en cada intento.
+  let browser = null;
   async function appPage() {
     const t0 = Date.now();
     let last;
     while (Date.now() - t0 < 120000) {
       try {
-        const wv = await device.webView({ pkg: PKG }, { timeout: 30000 });
-        const p = await wv.page();
+        const pid = (await sh(`pidof ${PKG}`)).trim().split(/\s+/)[0];
+        if (!pid) throw new Error('app sin proceso');
+        const socks = await sh('cat /proc/net/unix | grep -a webview_devtools_remote || true');
+        const m = socks.match(new RegExp('webview_devtools_remote_' + pid)) || socks.match(/webview_devtools_remote_\d+/);
+        if (!m) throw new Error('socket devtools no encontrado');
+        execSync(`adb forward --remove tcp:9333 2>/dev/null || true; adb forward tcp:9333 localabstract:${m[0].replace('@', '')}`);
+        if (browser) await browser.close().catch(() => {});
+        browser = await chromium.connectOverCDP('http://127.0.0.1:9333', { timeout: 30000 });
+        const pages = browser.contexts().flatMap((c) => c.pages());
+        const p = pages.find((x) => x.url().startsWith('http://localhost')) || pages[0];
+        if (!p) throw new Error('sin páginas en la WebView');
         await p.waitForFunction(() => window.__paReady === true, null, { timeout: 15000 });
         return p;
-      } catch (e) { last = e; await new Promise((r) => setTimeout(r, 2000)); }
+      } catch (e) { last = e; L('[adjuntar] ' + e.message.split('\n')[0]); await new Promise((r) => setTimeout(r, 3000)); }
     }
     throw last;
   }
