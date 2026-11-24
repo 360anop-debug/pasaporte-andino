@@ -1,0 +1,36 @@
+PHPUnit 11.5.58 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.4.28
+Configuration: /home/runner/work/pasaporte-andino/pasaporte-andino/backend-integration/phpunit.xml
+
+......................                                            22 / 22 (100%)
+
+Time: 00:03.772, Memory: 17.00 MB
+
+Public Api (PasaporteAndino\Tests\Integration\PublicApi)
+ ✔ Health and config
+ ✔ Territories from seed and search
+ ✔ Territory detail groups content
+ ✔ Demo content hidden when demo disabled
+ ✔ Production refuses demo and weak secret
+ ✔ Routes and destinations
+ ✔ Library adapters
+ ✔ Excluded educational modules are not routable
+ ✔ Cors allowlist
+ ✔ Share page has open graph and no pii
+ ✔ Invalid json and method
+
+Traveler Flow (PasaporteAndino\Tests\Integration\TravelerFlow)
+ ✔ Passport creation validates and minimizes data
+ ✔ Passport codes are unique and unpredictable
+ ✔ Unauthenticated and no passport errors
+ ✔ Web cookie session requires csrf for mutations
+ ✔ Register login logout and rate limit
+ ✔ Checkin grants visit stamp coins and is idempotent
+ ✔ Expired revoked and exhausted codes
+ ✔ Client events are validated server side
+ ✔ Admin reversal and roles
+ ✔ Album private upload list serve delete
+ ✔ Profile photo and account deletion
+
+OK (22 tests, 163 assertions)
