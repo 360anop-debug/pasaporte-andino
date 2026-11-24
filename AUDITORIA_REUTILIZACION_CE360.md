@@ -23,8 +23,19 @@ No se recibió inventario verificado (ID, título, distrito, licencia, fotograf�
 - Producción: solo organización territorial (13 provincias + Los Baños del Inca) y sellos/monedas por territorio.
 - Staging: contenido `es_demo=1` marcado en pantalla «DEMO», con medios técnicos de prueba generados (no documentales).
 
+## Adaptador preparado (sin inventar esquema)
+`backend-integration/src/Library/Ce360LibraryAdapter.php` ya implementa la lectura **por configuración**:
+- Mapeo de tablas/columnas reales en `config/ce360.php` (plantilla `config/ce360.example.php` con valores `<COMPLETAR>`; el archivo real queda fuera del repositorio).
+- Lecturas con capítulos (tabla relacionada) o con texto único; filtro opcional de publicación; tipo de clave (`entero`/`texto`).
+- Seguridad: identificadores validados `[A-Za-z0-9_]{1,64}` y citados; valores en consultas preparadas; solo `SELECT`; contraseña desde variable de entorno (`PA_CE360_DB_PASS`); se recomienda usuario MariaDB con `SELECT` exclusivo sobre esas tablas.
+- Verificación previa: `php bin/ce360-verificar.php [id]` comprueba en `INFORMATION_SCHEMA` que existen tablas y columnas y lee una lectura de prueba.
+- Pruebas: `tests/Integration/Ce360AdapterTest.php` con tablas ficticias de prueba `pa_test_ce360_*` (no representan el esquema real): mapeo, orden de capítulos, filtro de publicación, rechazo de inyección en identificadores, sin coerción de claves numéricas, detección de columnas inexistentes.
+- Mientras `PA_LIBRARY_CE360` no sea `1` o el mapeo no sea válido, la API responde `503 BIBLIOTECA_CE360_NO_CONFIGURADA` y la interfaz lo muestra de forma honesta.
+
 ## Pasos para completar la integración
-1. Entregar el código de CE360 (o acceso al repositorio) y un volcado anonimizado de esquema.
-2. Ejecutar `scripts/inspeccion.sh <kit> <ruta-ce360>` y completar esta matriz con rutas/tablas reales.
-3. Implementar `Ce360LibraryAdapter::find()` (SELECT preparado, usuario de solo lectura) y su prueba de contrato.
-4. Opcional: SSO con la sesión de CE360 si existe un mecanismo documentado.
+1. Entregar el código de CE360 (o acceso al repositorio) y un volcado anonimizado del esquema.
+2. Ejecutar `scripts/inspeccion.sh <kit> <ruta-ce360>` e identificar la tabla real de lecturas/capítulos.
+3. Copiar `config/ce360.example.php` a `config/ce360.php`, completar el mapeo y definir `PA_CE360_DB_PASS`.
+4. `php bin/ce360-verificar.php <id_real>` → sin errores.
+5. Activar `PA_LIBRARY_CE360=1` en staging, enlazar contenidos (`biblioteca_ref = ce360:<id>`) y validar con el lector.
+6. Opcional: SSO con la sesión de CE360 si existe un mecanismo documentado.

@@ -52,7 +52,7 @@ final class App
         $this->album = new Album($this->db, $config, $this->limiter);
         $this->libraries = [
             'local' => new LocalLibraryAdapter($this->db, $config->showDemo()),
-            'ce360' => new Ce360LibraryAdapter($config->bool('PA_LIBRARY_CE360')),
+            'ce360' => new Ce360LibraryAdapter($config->bool('PA_LIBRARY_CE360'), Ce360LibraryAdapter::loadMap(dirname(__DIR__) . '/config')),
         ];
         $this->router = new Router();
         $this->routes();
