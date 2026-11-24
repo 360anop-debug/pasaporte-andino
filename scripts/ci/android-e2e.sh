@@ -11,7 +11,7 @@ adb shell settings put global animator_duration_scale 0
 adb logcat -c
 # 1) APK de staging: instalación + E2E completo
 adb install -r instaladores/PasaporteAndino-Android-staging.apk | tee qa/logs/android-install-staging.txt
-node qa/e2e/android.cjs "$OUT"; E2E=$?
+timeout 28m node qa/e2e/android.cjs "$OUT"; E2E=$?
 echo "== logcat (errores, WebView, Capacitor) =="
 adb logcat -d -v brief | grep -E "AndroidRuntime|chromium|cr_|Capacitor|WebView|am_proc_died|ActivityManager: (Start|Kill|Process)" | grep -vE "Accessibility" | tail -80 || true
 adb logcat -d -s chromium:I Capacitor:V "Capacitor/Console":V AndroidRuntime:E > qa/logs/android-logcat-staging.txt || true

@@ -8,6 +8,8 @@ const { run, go } = require('./flujo.cjs');
 const PKG = 'net.aprep.region.pasaporteandino';
 const out = process.argv[2] || 'qa/capturas/android';
 fs.mkdirSync(out, { recursive: true });
+// Vigilante: nunca bloquear el pipeline por un cuelgue de la WebView/adb.
+setTimeout(() => { console.log('ERROR vigilante: E2E Android superó 25 min'); try { fs.writeFileSync(`${out}/resultado.json`, JSON.stringify({ error: 'timeout 25 min', log }, null, 2)); } catch {} process.exit(2); }, 25 * 60 * 1000).unref();
 const log = [];
 const L = (m) => { log.push(`[${new Date().toISOString()}] ${m}`); console.log(m); };
 const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php backend-integration/bin/admin.php codigo-checkin ${slug} 1 100'`).toString().split('\n')[0].trim();
