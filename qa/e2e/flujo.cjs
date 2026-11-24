@@ -108,10 +108,10 @@ async function run(page, h) {
     assert.equal(total.replace(/\D/g, ''), '400'); // 100+100 visitas + 200 ruta de bienestar
     await h.shot('11-monedas');
     await go(page, '#/pasaporte/sellos');
-    assert.equal(await page.locator('.stamp.got').count(), 2);
+    assert.equal(await page.locator('.stamp-grid .stamp.got').count(), 2);
     await h.shot('12-sellos');
     await go(page, '#/monedas/coleccion');
-    assert.equal(await page.locator('.coin.got').count(), 2);
+    assert.equal(await page.locator('.coin-grid .coin.got').count(), 2);
     await h.shot('13-coleccion');
   });
   await step('álbum: subir foto privada', async () => {
