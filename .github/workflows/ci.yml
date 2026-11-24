@@ -217,12 +217,15 @@ jobs:
           $env:PA_STORAGE_DIR = "$env:RUNNER_TEMP\pa-storage"
           cd backend-integration; composer install --no-interaction --no-progress --no-dev
           php bin/migrate.php up; php bin/seed.php base; php bin/seed.php demo; cd ..
-          Start-Process php -ArgumentList '-S','127.0.0.1:8080','scripts/staging-router.php' -RedirectStandardOutput "$env:RUNNER_TEMP\php.log" -RedirectStandardError "$env:RUNNER_TEMP\php-err.log"
-          Start-Sleep 3; Invoke-RestMethod http://127.0.0.1:8080/pasaporte/api/v1/salud
+
       - name: Instalar (silencioso), E2E, desinstalar — staging
         run: |
           New-Item -ItemType Directory -Force qa/logs | Out-Null
           $log = "qa/logs/windows-instalacion.txt"
+          # El servidor se arranca en ESTE paso: los procesos de pasos anteriores se terminan al acabar el paso.
+          $env:PA_STORAGE_DIR = "$env:RUNNER_TEMP\pa-storage"
+          $srv = Start-Process php -ArgumentList '-S','127.0.0.1:8080','scripts/staging-router.php' -PassThru -RedirectStandardOutput "$env:RUNNER_TEMP\php.log" -RedirectStandardError "$env:RUNNER_TEMP\php-err.log"
+          Start-Sleep 3; Invoke-RestMethod http://127.0.0.1:8080/pasaporte/api/v1/salud | ConvertTo-Json -Compress | Tee-Object -FilePath $log -Append
           $p = Start-Process instaladores/PasaporteAndino-Staging-Setup.exe -ArgumentList '/S' -Wait -PassThru
           "instalador staging exit=$($p.ExitCode)" | Tee-Object -FilePath $log -Append
           $un = Get-ChildItem HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall | Get-ItemProperty | Where-Object DisplayName -like 'Pasaporte Andino*'
