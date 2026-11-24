@@ -32,7 +32,7 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
       try {
         const wv = await device.webView({ pkg: PKG }, { timeout: 30000 });
         const p = await wv.page();
-        await p.waitForFunction(() => window.__paReady === true, null, { timeout: 15000 });
+        await p.waitForFunction(() => window.__paReady === true || window.__paIncompatible === true, null, { timeout: 15000 });
         return p;
       } catch (e) { last = e; await new Promise((r) => setTimeout(r, 2000)); }
     }
@@ -75,6 +75,14 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
   const r = resilient();
   await r.attach();
   const page = r.page;
+  if (await page.evaluate(() => window.__paIncompatible === true)) {
+    const ver = (await sh('dumpsys package com.android.webview | grep -m1 versionName || dumpsys package com.google.android.webview | grep -m1 versionName')).trim();
+    L('Motor web antiguo detectado (' + ver + '): la app muestra el aviso de actualización de Android System WebView.');
+    await nativeShot('00-aviso-webview-antiguo');
+    fs.writeFileSync(`${out}/resultado.json`, JSON.stringify({ plataforma: 'android-emulador', dispositivo: device.model(), webview: ver, resultado: 'MOTOR_WEB_ANTIGUO_AVISO_MOSTRADO', log }, null, 2));
+    await device.close();
+    process.exit(0);
+  }
   shot = async (n) => { try { await page.screenshot({ path: `${out}/${n}.png` }); } catch { await nativeShot(n); } };
   const res = await run(page, { shot: (n) => shot(n), checkinCode: code, photo: { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSync('qa/fixtures/foto-prueba.jpg') }, log: L });
 

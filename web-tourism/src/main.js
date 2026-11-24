@@ -90,6 +90,7 @@ onRender(async ({ path, r, params }) => {
 onLang(() => render());
 
 async function boot() {
+  if (window.__paIncompatible) return; // aviso de motor web antiguo ya mostrado (public/compat.js)
   document.documentElement.lang = getLang();
   document.documentElement.dataset.target = TARGET;
   savePrefs();
