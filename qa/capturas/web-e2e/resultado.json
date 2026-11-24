@@ -1,0 +1,69 @@
+{
+  "plataforma": "web-chromium",
+  "viewport": "393x852",
+  "pasos": [
+    {
+      "paso": "arranque y bienvenida",
+      "ok": true,
+      "ms": 1005
+    },
+    {
+      "paso": "validación cliente (sin consentimiento)",
+      "ok": true,
+      "ms": 46
+    },
+    {
+      "paso": "registro con foto opcional",
+      "ok": true,
+      "ms": 274
+    },
+    {
+      "paso": "inicio y Mi Pasaporte desde la barra",
+      "ok": true,
+      "ms": 2048
+    },
+    {
+      "paso": "catálogo, búsqueda y filtro",
+      "ok": true,
+      "ms": 1212
+    },
+    {
+      "paso": "distrito, historia, video y audio",
+      "ok": true,
+      "ms": 5825
+    },
+    {
+      "paso": "lector de Biblioteca (progreso servidor)",
+      "ok": true,
+      "ms": 1110
+    },
+    {
+      "paso": "check-in QR firmado → sello y monedas del servidor",
+      "ok": true,
+      "ms": 4676
+    },
+    {
+      "paso": "álbum: subir foto privada",
+      "ok": true,
+      "ms": 1439
+    },
+    {
+      "paso": "rutas, idioma EN y retorno a ES",
+      "ok": true,
+      "ms": 1926
+    }
+  ],
+  "errores_js": [],
+  "log": [
+    "OK   arranque y bienvenida",
+    "OK   validación cliente (sin consentimiento)",
+    "OK   registro con foto opcional",
+    "OK   inicio y Mi Pasaporte desde la barra",
+    "OK   catálogo, búsqueda y filtro",
+    "OK   distrito, historia, video y audio",
+    "OK   lector de Biblioteca (progreso servidor)",
+    "OK   check-in QR firmado → sello y monedas del servidor",
+    "OK   álbum: subir foto privada",
+    "OK   rutas, idioma EN y retorno a ES"
+  ]
+}

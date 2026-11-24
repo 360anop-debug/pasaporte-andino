@@ -1,0 +1,28 @@
+== composer audit
+Composer plugins have been disabled for safety in this non-interactive session.
+Set COMPOSER_ALLOW_SUPERUSER=1 if you want to allow plugins to run as root/super user.
+Do not run Composer as root/super user! See https://getcomposer.org/root for details
+No security vulnerability advisories found.
+== npm audit web (prod deps)
+1 high severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+== npm audit android
+
+To address all issues, run:
+  npm audit fix --force
+== npm audit windows
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+== innerHTML con datos (debe limitarse a SVG estáticos/QR generado)
+web-tourism/src/ui.js:169:  el.innerHTML = `<svg viewBox="0 0 200 170" aria-hidden="true"><defs><path id="${id}" d="M28 112 A74 74 0 0 0 172 112"/></defs>
+web-tourism/src/icons.js:45:  s.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${P[name] || ''}</svg>`;
+web-tourism/src/screens/passportCard.js:17:    .then((svg) => { qr.innerHTML = svg; }).catch(() => {});
+== SQL con interpolación de variables de usuario (revisión)
+backend-integration/src/Service/Gamification.php:97:            $visited = (int)$this->db->scalar("SELECT COUNT(*) FROM pa_visitas WHERE pasaporte_id = ? AND destino_id IN ($in)", [$pid, ...$ids]);
+== secretos en el repo

@@ -12,13 +12,13 @@
     "test": "node --test tests/unit/*.test.mjs"
   },
   "dependencies": {
-    "@capacitor/core": "7.4.2",
+    "@capacitor/core": "7.6.10",
     "@fontsource/alegreya": "5.2.6",
     "@fontsource/cinzel": "5.2.6",
     "@fontsource/nunito": "5.2.6",
     "jsqr": "1.4.0",
     "leaflet": "1.9.4",
     "qrcode": "1.5.4",
-    "vite": "6.3.5"
+    "vite": "6.4.6"
   }
 }
