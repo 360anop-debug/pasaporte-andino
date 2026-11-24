@@ -57,6 +57,7 @@ let seq = 0;
 
 onRender(async ({ path, r, params }) => {
   const my = ++seq;
+  document.querySelectorAll('.drawer-wrap, .sheet-wrap').forEach((x) => x.remove()); // cerrar menús/hojas al navegar
   if (!r) { navigate('/inicio', { replace: true }); return; }
   if (path === '/' ) { navigate(state.hasPassport() ? '/inicio' : '/bienvenida', { replace: true }); return; }
   if (r.meta.guard === 'passport' && !state.hasPassport()) {

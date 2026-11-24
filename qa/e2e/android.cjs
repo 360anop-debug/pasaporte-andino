@@ -30,6 +30,7 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
     let last;
     while (Date.now() - t0 < 120000) {
       try {
+        if (!(await sh(`pidof ${PKG}`)).trim()) { L('[adjuntar] app no está en ejecución: se relanza'); await sh(`am start -W -n ${PKG}/.MainActivity`); }
         const wv = await device.webView({ pkg: PKG }, { timeout: 30000 });
         const p = await wv.page();
         await p.waitForFunction(() => window.__paReady === true || window.__paIncompatible === true, null, { timeout: 15000 });
