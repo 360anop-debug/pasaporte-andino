@@ -7,7 +7,7 @@ import android.util.Base64;
 
 import androidx.core.content.FileProvider;
 import androidx.security.crypto.EncryptedSharedPreferences;
-import androidx.security.crypto.MasterKey;
+import androidx.security.crypto.MasterKeys;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -30,8 +30,9 @@ public class PaSecurePlugin extends Plugin {
     private SharedPreferences prefs() throws Exception {
         if (prefs == null) {
             Context ctx = getContext();
-            MasterKey key = new MasterKey.Builder(ctx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build();
-            prefs = EncryptedSharedPreferences.create(ctx, "pa_secure", key,
+            // API estable de security-crypto 1.0.0: clave maestra AES-256-GCM en Android Keystore.
+            String alias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+            prefs = EncryptedSharedPreferences.create("pa_secure", alias, ctx,
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
         }
