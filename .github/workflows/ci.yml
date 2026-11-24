@@ -160,7 +160,7 @@ jobs:
           ram-size: 4096M
           heap-size: 512M
           cores: 4
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -HardwareDecoder
           script: bash scripts/ci/android-e2e.sh
       - uses: actions/upload-artifact@v4
         if: always()
