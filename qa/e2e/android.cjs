@@ -35,9 +35,43 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
     }
     throw last;
   }
+  // Envoltorio resiliente: si el destino de la WebView se reemplaza (p. ej. recreación de la actividad o del
+  // renderer), se vuelve a adjuntar y se reintenta la operación una vez. Se registra cada evento para diagnóstico.
+  function resilient() {
+    let cur = null;
+    const attach = async () => {
+      cur = await appPage();
+      const pid = (await sh(`pidof ${PKG}`)).trim();
+      L(`adjuntado a WebView ${cur.url()} (pid app ${pid})`);
+      cur.on('close', () => L('[evento] página de la WebView cerrada'));
+      cur.on('crash', () => L('[evento] renderer de la WebView caído'));
+      cur.on('pageerror', (e) => L('[pageerror] ' + e.message));
+      cur.on('console', (m) => { if (m.type() === 'error') L('[consola] ' + m.text()); });
+      return cur;
+    };
+    const sync = new Set(['locator', 'keyboard', 'url']);
+    return { attach, page: new Proxy({}, {
+      get(_, prop) {
+        if (sync.has(prop)) { const v = cur[prop]; return typeof v === 'function' ? v.bind(cur) : v; }
+        return async (...args) => {
+          for (let i = 0; ; i++) {
+            try {
+              if (!cur || cur.isClosed()) await attach();
+              return await cur[prop](...args);
+            } catch (e) {
+              if (i >= 2 || !/closed|Target/i.test(String(e.message))) throw e;
+              L(`[reintento ${i + 1}] ${prop}: ${e.message.split('\n')[0]}`);
+              cur = null;
+            }
+          }
+        };
+      },
+    }) };
+  }
   await sh(`am start -W -n ${PKG}/.MainActivity`);
-  const page = await appPage();
-  L('WebView lista: ' + page.url());
+  const r = resilient();
+  await r.attach();
+  const page = r.page;
   const res = await run(page, { shot, checkinCode: code, photo: { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSync('qa/fixtures/foto-prueba.jpg') }, log: L });
 
   await check('botón Atrás de Android vuelve al contexto anterior', async () => {
