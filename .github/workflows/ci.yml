@@ -216,13 +216,14 @@ jobs:
           $log = "qa/logs/windows-instalacion.txt"
           $p = Start-Process instaladores/PasaporteAndino-Staging-Setup.exe -ArgumentList '/S' -Wait -PassThru
           "instalador staging exit=$($p.ExitCode)" | Tee-Object -FilePath $log -Append
-          $dir = "$env:LOCALAPPDATA\Programs\pasaporte-andino-desktop"
+          $un = Get-ChildItem HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall | Get-ItemProperty | Where-Object DisplayName -like 'Pasaporte Andino*'
+          "registro desinstalación: $($un.DisplayName) $($un.DisplayVersion) $($un.Publisher) en $($un.InstallLocation)" | Tee-Object -FilePath $log -Append
+          $dir = $un.InstallLocation.Trim('"')
+          Get-ChildItem $dir | Select-Object Name, Length | Format-Table | Out-String | Tee-Object -FilePath $log -Append
           $exe = Join-Path $dir 'Pasaporte Andino.exe'
           "exe existe: $(Test-Path $exe)" | Tee-Object -FilePath $log -Append
           "acceso escritorio: $(Test-Path "$env:USERPROFILE\Desktop\Pasaporte Andino.lnk")" | Tee-Object -FilePath $log -Append
           "acceso menú inicio: $(Test-Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Pasaporte Andino.lnk")" | Tee-Object -FilePath $log -Append
-          $un = Get-ChildItem HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall | Get-ItemProperty | Where-Object DisplayName -like 'Pasaporte Andino*'
-          "registro desinstalación: $($un.DisplayName) $($un.DisplayVersion) $($un.Publisher)" | Tee-Object -FilePath $log -Append
           (Get-Item $exe).VersionInfo | Format-List ProductName,FileDescription,ProductVersion,CompanyName | Out-String | Tee-Object -FilePath $log -Append
           npm i --no-save --prefix qa/e2e playwright@1.56.1; Copy-Item -Recurse qa/e2e/node_modules ./node_modules
           $env:PA_STORAGE_DIR = "$env:RUNNER_TEMP\pa-storage"
@@ -240,7 +241,8 @@ jobs:
           $log = "qa/logs/windows-instalacion.txt"
           $p = Start-Process instaladores/PasaporteAndino-Setup.exe -ArgumentList '/S' -Wait -PassThru
           "instalador producción exit=$($p.ExitCode)" | Tee-Object -FilePath $log -Append
-          $dir = "$env:LOCALAPPDATA\Programs\pasaporte-andino-desktop"; $exe = Join-Path $dir 'Pasaporte Andino.exe'
+          $un = Get-ChildItem HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall | Get-ItemProperty | Where-Object DisplayName -like 'Pasaporte Andino*'
+          $dir = $un.InstallLocation.Trim('"'); $exe = Join-Path $dir 'Pasaporte Andino.exe'
           @'
           const { _electron } = require('playwright');
           (async () => { const app = await _electron.launch({ executablePath: process.argv[2] });
