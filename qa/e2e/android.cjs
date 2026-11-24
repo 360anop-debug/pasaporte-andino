@@ -19,7 +19,8 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
   assert.ok(device, 'sin dispositivo adb');
   L(`dispositivo: ${device.model()} ${device.serial()}`);
   const sh = async (c) => (await device.shell(c)).toString();
-  const shot = (n) => device.screenshot({ path: `${out}/${n}.png` });
+  const nativeShot = (n) => device.screenshot({ path: `${out}/${n}.png` });
+  let shot = nativeShot; // se sustituye por la captura de la WebView cuando la página está adjunta
   const extra = [];
   const check = async (name, fn) => { try { await fn(); extra.push({ paso: name, ok: true }); L('OK   ' + name); } catch (e) { extra.push({ paso: name, ok: false, error: e.message }); L('FAIL ' + name + ': ' + e.message); } };
 
@@ -74,7 +75,8 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
   const r = resilient();
   await r.attach();
   const page = r.page;
-  const res = await run(page, { shot, checkinCode: code, photo: { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSync('qa/fixtures/foto-prueba.jpg') }, log: L });
+  shot = async (n) => { try { await page.screenshot({ path: `${out}/${n}.png` }); } catch { await nativeShot(n); } };
+  const res = await run(page, { shot: (n) => shot(n), checkinCode: code, photo: { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSync('qa/fixtures/foto-prueba.jpg') }, log: L });
 
   await check('botón Atrás de Android vuelve al contexto anterior', async () => {
     await go(page, '#/distritos');
@@ -89,7 +91,7 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
     await page.waitForTimeout(3000);
     const top = await sh('dumpsys activity activities | grep -E "topResumedActivity|mResumedActivity" | head -3');
     L('actividad al abrir selector: ' + top.trim());
-    await shot('20-selector-fotos');
+    await nativeShot('20-selector-fotos');
     assert.ok(!top.includes(PKG + '/.MainActivity') || /documentsui|photopicker|chooser|gallery/i.test(top), 'no se abrió el selector');
     await sh('input keyevent 4');
     await page.waitForTimeout(1500);
@@ -101,7 +103,7 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
     await page.waitForTimeout(2500);
     const top = await sh('dumpsys activity activities | grep -E "topResumedActivity|mResumedActivity" | head -3');
     L('actividad al compartir: ' + top.trim());
-    await shot('21-compartir-nativo');
+    await nativeShot('21-compartir-nativo');
     assert.match(top, /Chooser|chooser|ResolverActivity|intentresolver/i);
     await sh('input keyevent 4');
     await page.waitForTimeout(1500);
@@ -118,7 +120,7 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
   await check('orientación horizontal', async () => {
     await sh('settings put system accelerometer_rotation 0; settings put system user_rotation 1');
     await page.waitForTimeout(2500);
-    await shot('22-horizontal');
+    await nativeShot('22-horizontal');
     await sh('settings put system user_rotation 0');
     await page.waitForTimeout(1500);
   });
@@ -130,7 +132,7 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
     await p2.waitForSelector('[data-testid=passport-code]', { timeout: 30000 });
     const ls = await p2.evaluate(() => Object.keys(localStorage).join(','));
     assert.ok(!/token|session/i.test(ls), 'token en localStorage: ' + ls);
-    await shot('23-sesion-persistente');
+    await nativeShot('23-sesion-persistente');
   });
   fs.writeFileSync(`${out}/resultado.json`, JSON.stringify({ plataforma: 'android-emulador', dispositivo: device.model(), flujo: res, extra, log }, null, 2));
   await device.close();
