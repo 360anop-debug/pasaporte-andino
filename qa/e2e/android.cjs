@@ -85,8 +85,15 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
     process.exit(0);
   }
   shot = async (n) => { try { await page.screenshot({ path: `${out}/${n}.png` }); } catch { await nativeShot(n); } };
-  const res = await run(page, { shot: (n) => shot(n), checkinCode: code, photo: { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSync('qa/fixtures/foto-prueba.jpg') }, log: L });
+  const PARTE = process.env.PA_E2E_PARTE || 'todo'; // flujo | nativo | todo
+  L('parte del E2E: ' + PARTE);
+  const res = await run(page, { soloRegistro: PARTE === 'nativo', shot: (n) => shot(n), checkinCode: code, photo: { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSync('qa/fixtures/foto-prueba.jpg') }, log: L });
 
+  if (PARTE === 'flujo') {
+    fs.writeFileSync(`${out}/resultado.json`, JSON.stringify({ plataforma: 'android-emulador', parte: PARTE, dispositivo: device.model(), flujo: res, log }, null, 2));
+    await device.close();
+    process.exit(res.every((x) => x.ok) ? 0 : 1);
+  }
   await check('botón Atrás de Android vuelve al contexto anterior', async () => {
     await go(page, '#/distritos');
     await go(page, '#/distrito/cajamarca');
@@ -143,7 +150,7 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
     assert.ok(!/token|session/i.test(ls), 'token en localStorage: ' + ls);
     await nativeShot('23-sesion-persistente');
   });
-  fs.writeFileSync(`${out}/resultado.json`, JSON.stringify({ plataforma: 'android-emulador', dispositivo: device.model(), flujo: res, extra, log }, null, 2));
+  fs.writeFileSync(`${out}/resultado.json`, JSON.stringify({ plataforma: 'android-emulador', parte: PARTE, dispositivo: device.model(), flujo: res, extra, log }, null, 2));
   await device.close();
   if (extra.some((x) => !x.ok)) process.exit(1);
 })().catch((e) => { L('ERROR ' + e.stack); fs.writeFileSync(`${out}/resultado.json`, JSON.stringify({ error: e.message, log }, null, 2)); process.exit(1); });

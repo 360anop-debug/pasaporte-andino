@@ -134,7 +134,7 @@ jobs:
             instaladores/*.aab
             qa/logs
   android-e2e:
-    name: Android E2E emulador (API ${{ matrix.api }}, GPU ${{ matrix.gpu }})
+    name: Android E2E emulador (API ${{ matrix.api }}, ${{ matrix.parte }})
     needs: [android]
     runs-on: ubuntu-24.04
     timeout-minutes: 60
@@ -142,9 +142,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { api: 34, gpu: guest }
-          - { api: 33, gpu: guest }
-          - { api: 30, gpu: guest }
+          - { api: 34, gpu: guest, parte: flujo }
+          - { api: 34, gpu: guest, parte: nativo }
+          - { api: 33, gpu: guest, parte: flujo }
+          - { api: 30, gpu: guest, parte: compatibilidad }
     services:
       mariadb:
         image: mariadb:11.4
@@ -186,11 +187,11 @@ jobs:
           heap-size: 512M
           cores: 4
           emulator-options: -no-window -gpu ${{ matrix.gpu }} -noaudio -no-boot-anim -camera-back none -no-snapshot -feature -HardwareDecoder
-          script: bash scripts/ci/android-e2e.sh
+          script: PA_E2E_PARTE=${{ matrix.parte }} bash scripts/ci/android-e2e.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: android-e2e-api${{ matrix.api }}-${{ matrix.gpu }}
+          name: android-e2e-api${{ matrix.api }}-${{ matrix.parte }}
           path: |
             qa/capturas/android
             qa/logs

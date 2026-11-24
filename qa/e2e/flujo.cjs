@@ -49,6 +49,7 @@ async function run(page, h) {
     await page.waitForSelector('.pc-qr svg');
     await h.shot('02-pasaporte-creado');
   });
+  if (h.soloRegistro) return results;
   await step('inicio y Mi Pasaporte desde la barra', async () => {
     await go(page, '#/inicio');
     await h.shot('03-inicio');
