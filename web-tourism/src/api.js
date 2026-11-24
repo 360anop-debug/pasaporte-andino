@@ -72,15 +72,21 @@ export async function api(method, path, opt = {}) {
   if (opt.json !== undefined) { headers['Content-Type'] = 'application/json'; body = JSON.stringify(opt.json); }
   if (opt.form) body = opt.form;
   let res;
+  // Tiempo máximo por petición: en redes lentas o servidor inaccesible la app no se queda esperando indefinidamente.
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort('timeout'), opt.timeout || 15000);
+  if (opt.signal) opt.signal.addEventListener('abort', () => ctl.abort('cancel'), { once: true });
   try {
-    res = await fetch(API_BASE + path, { method, headers, body, credentials: 'include', signal: opt.signal, cache: 'no-store' });
+    res = await fetch(API_BASE + path, { method, headers, body, credentials: 'include', signal: ctl.signal, cache: 'no-store' });
   } catch (e) {
-    if (e.name === 'AbortError') throw e;
+    if (e.name === 'AbortError' && opt.signal?.aborted) throw e;
     if (method === 'GET' && opt.publicCache) {
       const c = cacheGet(path);
       if (c) return Object.assign(structuredClone(c.d), { __offline: true, __cachedAt: c.t });
     }
     throw new ApiError(0, 'SIN_CONEXION', 'Sin conexión con el servidor.');
+  } finally {
+    clearTimeout(timer);
   }
   if (opt.raw) {
     if (!res.ok) throw new ApiError(res.status, 'ERROR', 'No se pudo cargar el archivo.');

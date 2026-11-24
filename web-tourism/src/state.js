@@ -17,7 +17,15 @@ export const state = {
   passport: null,
   progress: null,
   async loadSession() {
-    try { this.session = await api('GET', '/auth/sesion'); } catch (e) { this.session = this.session || { autenticado: false, error: e }; }
+    try {
+      this.session = await api('GET', '/auth/sesion', { timeout: 5000 });
+      try { localStorage.setItem('pa-has-passport', this.session.tiene_pasaporte ? '1' : '0'); } catch { /* */ }
+    } catch (e) {
+      // Sin red: se recuerda solo si este dispositivo ya tenía pasaporte (dato no sensible) para no forzar el registro.
+      let had = false;
+      try { had = localStorage.getItem('pa-has-passport') === '1'; } catch { /* */ }
+      this.session = this.session || { autenticado: had, tiene_pasaporte: had, error: e };
+    }
     return this.session;
   },
   async loadPassport(force = false) {
@@ -42,6 +50,7 @@ export const state = {
     this.session = { autenticado: false };
     this.passport = null;
     this.progress = null;
+    try { localStorage.removeItem('pa-has-passport'); } catch { /* */ }
     clearPrivateCache();
     forgetImage('/');
   },

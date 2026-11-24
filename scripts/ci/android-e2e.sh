@@ -20,7 +20,7 @@ adb shell pm list packages | grep -c $PKG > qa/logs/android-tras-desinstalar.txt
 # 2) APK de release (producción): instalación, primer arranque, captura y desinstalación
 adb install instaladores/PasaporteAndino-Android.apk | tee qa/logs/android-install-release.txt
 adb shell am start -W -n $PKG/.MainActivity | tee qa/logs/android-start-release.txt
-sleep 12
+sleep 20
 adb exec-out screencap -p > "$OUT/40-release-primer-arranque.png"
 adb shell input keyevent 4; sleep 2
 adb shell pidof $PKG > qa/logs/android-release-pid.txt || echo "proceso no vivo" >> qa/logs/android-release-pid.txt
