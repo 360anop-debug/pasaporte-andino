@@ -138,6 +138,12 @@ jobs:
       - name: Backend de staging en el host
         run: bash scripts/ci/backend-staging.sh
       - run: npm i --no-save --prefix qa/e2e playwright@1.56.1 && cp -r qa/e2e/node_modules ./node_modules
+      - name: Liberar espacio en disco para el emulador
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup /usr/local/share/boost /opt/hostedtoolcache/CodeQL /usr/local/lib/android/sdk/ndk /usr/share/swift
+          sudo docker image prune -af >/dev/null 2>&1 || true
+          df -h /
       - name: Habilitar KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -150,6 +156,9 @@ jobs:
           target: google_apis
           profile: pixel_7
           disable-animations: true
+          disk-size: 4096M
+          ram-size: 3072M
+          cores: 4
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: bash scripts/ci/android-e2e.sh
       - uses: actions/upload-artifact@v4
