@@ -86,7 +86,9 @@ async function launch(args = []) {
   await check('sin red: estado honesto y caché pública', async () => {
     ({ app, page } = await launch());
     await go(page, '#/distritos');
-    await app.evaluate(({ session }) => session.defaultSession.enableNetworkEmulation({ offline: true }));
+    // Corte real: se detiene el backend (equivale a quedarse sin conexión con el servidor).
+    try { execSync('taskkill /F /IM php.exe', { stdio: 'ignore' }); } catch { /* ya detenido */ }
+    await page.waitForTimeout(1500);
     await go(page, '#/inicio');
     await go(page, '#/distritos');
     await page.waitForSelector('.offline-banner', { timeout: 15000 });
