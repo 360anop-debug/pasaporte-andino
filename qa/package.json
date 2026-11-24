@@ -1,0 +1,6 @@
+{
+  "name": "pasaporte-andino-qa",
+  "private": true,
+  "description": "Herramientas de QA (E2E y capturas). Instalar con: npm --prefix qa install && npx --prefix qa playwright install chromium",
+  "devDependencies": { "playwright": "1.56.1" }
+}

@@ -18,3 +18,5 @@ instaladores/
 .env.local
 qa/e2e/node_modules/
 backend-integration/config/ce360.php
+scripts/staging.env.local
+qa/node_modules/

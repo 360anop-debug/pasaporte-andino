@@ -3,6 +3,7 @@ const { chromium } = require('playwright');
 const { execSync } = require('node:child_process');
 const fs = require('node:fs');
 const { run } = require('./flujo.cjs');
+const { checkinCode } = require('./staging-env.cjs');
 (async () => {
   const [url = 'http://127.0.0.1:8080/pasaporte/', out = 'qa/capturas/web-e2e', w = '393', hgt = '852'] = process.argv.slice(2);
   fs.mkdirSync(out, { recursive: true });
@@ -16,7 +17,7 @@ const { run } = require('./flujo.cjs');
   try {
     res = await run(page, {
       shot: (n) => page.screenshot({ path: `${out}/${n}.png` }),
-      checkinCode: (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php backend-integration/bin/admin.php codigo-checkin ${slug} 1 100'`).toString().split('\n')[0].trim(),
+      checkinCode: (slug) => checkinCode(slug),
       photo: { name: 'foto-prueba.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSync('qa/fixtures/foto-prueba.jpg') },
       log: (m) => { log.push(m); console.log(m); },
     });

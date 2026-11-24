@@ -10,5 +10,9 @@
     <env name="PA_SECRET" value="test-secret-0123456789-abcdefghijklmnop"/>
     <env name="PA_MIN_READING_SECONDS" value="0"/>
     <env name="PA_COOKIE_SECURE" value="0"/>
+    <!-- Valores locales por defecto (no sustituyen variables ya definidas, p. ej. en CI) -->
+    <env name="PA_DB_DSN" value="mysql:host=127.0.0.1;dbname=pa_test;charset=utf8mb4" force="false"/>
+    <env name="PA_DB_USER" value="pa_app" force="false"/>
+    <env name="PA_DB_PASS" value="pa_local_dev" force="false"/>
   </php>
 </phpunit>

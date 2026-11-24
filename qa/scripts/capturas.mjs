@@ -8,8 +8,8 @@ import { execSync } from 'node:child_process';
 const base = process.argv[2] || 'http://127.0.0.1:8080/pasaporte/';
 const out = process.argv[3] || 'qa/capturas';
 const sizes = (process.argv.slice(4).length ? process.argv.slice(4) : ['393x852']).map((s) => s.split('x').map(Number));
-const env = 'set -a; . scripts/staging.env.sh; set +a;';
-const code = (slug) => execSync(`bash -c '${env} php backend-integration/bin/admin.php codigo-checkin ${slug} 30 1000'`).toString().split('\n')[0].trim();
+const { checkinCode } = createRequire(import.meta.url)('../e2e/staging-env.cjs');
+const code = (slug) => checkinCode(slug, 30, 1000);
 const SCREENS = [
   ['01-inicio', '#/inicio'], ['02-distritos', '#/distritos'], ['03-distrito-portada', '#/distrito/cajamarca'], ['04-distrito-contenidos', '#/distrito/cajamarca/contenidos'],
   ['05-historia', '#/distrito/cajamarca/historia'], ['06-videos', '#/distrito/cajamarca/videos'], ['07-audios', '#/distrito/cajamarca/audios'],

@@ -10,3 +10,4 @@ set -a; . scripts/staging.env.sh; set +a
 php -S 127.0.0.1:8080 scripts/staging-router.php >/tmp/pa-staging.log 2>&1 & SRV=$!; trap 'kill $SRV' EXIT; sleep 1
 node qa/e2e/web.cjs http://127.0.0.1:8080/pasaporte/ qa/capturas/web-e2e 393 852
 node qa/scripts/capturas.mjs http://127.0.0.1:8080/pasaporte/ qa/capturas/web 360x800 393x852 412x915 768x1024 1366x768 1920x1080
+python3 -I qa/scripts/comparativas.py docs/referencias_visuales qa/capturas/web/393x852 qa/capturas/comparativas

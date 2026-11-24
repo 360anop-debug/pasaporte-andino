@@ -9,7 +9,7 @@ const [exe, out = 'qa/capturas/windows'] = process.argv.slice(2);
 fs.mkdirSync(out, { recursive: true });
 const log = [];
 const L = (m) => { log.push(`[${new Date().toISOString()}] ${m}`); console.log(m); };
-const code = (slug) => execSync(`php backend-integration/bin/admin.php codigo-checkin ${slug} 1 100`, { env: process.env }).toString().split(/\r?\n/)[0].trim();
+const { checkinCode: code } = require('./staging-env.cjs');
 const photo = { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSync('qa/fixtures/foto-prueba.jpg') };
 
 async function launch(args = []) {
@@ -87,7 +87,8 @@ async function launch(args = []) {
     ({ app, page } = await launch());
     await go(page, '#/distritos');
     // Corte real: se detiene el backend (equivale a quedarse sin conexión con el servidor).
-    try { execSync('taskkill /F /IM php.exe', { stdio: 'ignore' }); } catch { /* ya detenido */ }
+    // Corte del backend: en Windows taskkill; en otros sistemas se puede detener el proceso «php -S» manualmente.
+    try { execSync(process.platform === 'win32' ? 'taskkill /F /IM php.exe' : 'pkill -f "php -S"', { stdio: 'ignore' }); } catch { /* ya detenido */ }
     await page.waitForTimeout(1500);
     await go(page, '#/inicio');
     await go(page, '#/distritos');
