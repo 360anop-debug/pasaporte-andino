@@ -3,6 +3,7 @@ import { icon, flags, MOUNTAINS } from './icons.js';
 import { t, L, getLang, setLang } from './i18n.js';
 import { state, prefs } from './state.js';
 import { navigate, goBack } from './router.js';
+import { picto } from './pictos.js';
 
 /** h('div.clase#id', {attrs}, ...hijos) */
 export function h(sel, attrs, ...kids) {
@@ -153,26 +154,36 @@ export function progressBar(value, total, label) {
     h('span.progress-pct', pct + '%'));
 }
 
-/** Sello: arte del kit si existe; si no, sello vectorial generado con el nombre real (texto DOM). */
+/** Sello: arte original del kit si existe; si no, sello vectorial con la composición de la ref. 06
+ * (doble anillo perforado, pictograma del territorio, cinta con el nombre real y tres estrellas). */
 export function stampEl(s, obtained) {
-  const name = L(s.territorio.nombre).toUpperCase();
-  if (!obtained) {
-    return h('div.stamp.locked', { title: t('locked') + ' · ' + L(s.territorio.nombre) },
-      genStamp(name, '#8d8d8d', true), h('span.sr-only', t('locked') + ' ' + L(s.territorio.nombre)));
-  }
-  if (s.imagen) return h('div.stamp.got', img(s.imagen, L(s.territorio.nombre), 'stamp-img'));
-  return h('div.stamp.got', genStamp(name, s.color || '#7a1f2b', false));
+  const nombre = L(s.territorio.nombre);
+  if (obtained && s.imagen) return h('div.stamp.got', img(s.imagen, nombre, 'stamp-img'));
+  return h('div.stamp' + (obtained ? '.got' : '.locked'), { title: (obtained ? '' : t('locked') + ' · ') + nombre },
+    genStamp(s.territorio.slug, nombre.toUpperCase(), obtained ? (s.color || '#7a1f2b') : '#8c8c8c', !obtained),
+    obtained ? null : h('span.sr-only', t('locked') + ' ' + nombre));
 }
-function genStamp(name, color, locked) {
-  const id = 'arc' + Math.random().toString(36).slice(2, 8);
+const SVGNS = 'http://www.w3.org/2000/svg';
+function genStamp(slug, name, color, locked) {
   const el = h('div.gen-stamp', { style: { color } });
-  el.innerHTML = `<svg viewBox="0 0 200 170" aria-hidden="true"><defs><path id="${id}" d="M28 112 A74 74 0 0 0 172 112"/></defs>
-    <circle cx="100" cy="82" r="76" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="3 5"/>
-    <circle cx="100" cy="82" r="68" fill="none" stroke="currentColor" stroke-width="3"/>
-    <path d="M45 92 78 52l14 16 18-28 45 52Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
-    ${locked ? '<g transform="translate(86 104)"><rect x="0" y="10" width="28" height="22" rx="4" fill="currentColor"/><path d="M5 10V6a9 9 0 0 1 18 0v4" fill="none" stroke="currentColor" stroke-width="4"/></g>' : '<path d="M78 120l4 8 9 1-7 6 2 9-8-5-8 5 2-9-7-6 9-1zM100 120l4 8 9 1-7 6 2 9-8-5-8 5 2-9-7-6 9-1zM122 120l4 8 9 1-7 6 2 9-8-5-8 5 2-9-7-6 9-1z" fill="currentColor" transform="scale(.8) translate(25 30)"/>'}
-    </svg>`;
-  el.append(h('span.gen-stamp-name', name));
+  // Estructura estática (sin datos) + nombre insertado como nodo de texto SVG (sin innerHTML de datos).
+  el.innerHTML = `<svg viewBox="0 0 200 200" aria-hidden="true">
+    <circle cx="100" cy="100" r="94" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="2.5 5"/>
+    <circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" stroke-width="4"/>
+    <circle cx="100" cy="100" r="78" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".7"/>
+    <g transform="translate(45 30) scale(1.1)" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round">${picto(slug)}</g>
+    <path d="M22 116h156l-10 15 10 15H22l10-15Z" fill="#fffdf6" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+    <g fill="currentColor">${[78, 100, 122].map((x) => `<path transform="translate(${x} 164) scale(.42)" d="M0-14 4-4 14-4 6 3 9 13 0 7-9 13-6 3-14-4-4-4Z"/>`).join('')}</g>
+    ${locked ? '<g transform="translate(86 152)" fill="currentColor"><rect x="0" y="12" width="28" height="22" rx="4"/><path d="M5 12V8a9 9 0 0 1 18 0v4" fill="none" stroke="currentColor" stroke-width="4"/></g>' : ''}
+  </svg>`;
+  const svg = el.firstElementChild;
+  const txt = document.createElementNS(SVGNS, 'text');
+  txt.setAttribute('x', '100'); txt.setAttribute('y', '138'); txt.setAttribute('text-anchor', 'middle');
+  txt.setAttribute('font-size', name.length > 11 ? '17' : '21'); txt.setAttribute('font-weight', '700');
+  txt.setAttribute('fill', 'currentColor'); txt.setAttribute('class', 'gen-stamp-text');
+  txt.setAttribute('textLength', String(Math.min(140, name.length * 13))); txt.setAttribute('lengthAdjust', 'spacingAndGlyphs');
+  txt.textContent = name;
+  svg.append(txt);
   return el;
 }
 
@@ -182,8 +193,8 @@ export function coinEl(s, obtained) {
   if (!obtained) return h('div.coin.locked', img('assets/monedas/moneda-oculta.webp', t('locked') + ' · ' + name), h('span.coin-name', name.toUpperCase()));
   return h('div.coin.got',
     img(s.moneda_imagen || 'assets/monedas/moneda-base.webp', name),
-    s.moneda_imagen ? null : h('span.coin-glyph', { 'aria-hidden': 'true' }, name.slice(0, 1)),
-    h('span.coin-name', name.toUpperCase()), h('span.coin-check', { 'aria-label': t('achieved') }, icon('check')));
+    s.moneda_imagen ? null : h('span.coin-engrave', { 'aria-hidden': 'true', html: `<svg viewBox="0 0 100 70"><g fill="none" stroke-linecap="round" stroke-linejoin="round"><g stroke="#fff0a8" stroke-width="5" transform="translate(.8 1.2)">${picto(s.territorio.slug)}</g><g stroke="#7a4708" stroke-width="4.4">${picto(s.territorio.slug)}</g></g></svg>` }),
+    h('span.coin-name' + (name.length > 11 ? '.long' : ''), name.toUpperCase()), h('span.coin-check', { 'aria-label': t('achieved') }, icon('check')));
 }
 
 export function guideBubble(who, text) {

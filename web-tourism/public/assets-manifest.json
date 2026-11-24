@@ -64,8 +64,8 @@
    "derivacion": "halo residual eliminado (limpiar_halo_personajes.py)",
    "estado": "listo",
    "notas": "Fuente: tanda 01",
-   "sha256": "f85a2efb7cc11cbfe4351e8ae1e3f14660b10c964ad9c7b37811e274454a7f26",
-   "bytes": 63492
+   "sha256": "75114ef190588cef894ea525b4216a62ad9af4e258761b867a8667a603206824",
+   "bytes": 64512
   },
   {
    "archivo": "assets/personajes/delia-guia.webp",

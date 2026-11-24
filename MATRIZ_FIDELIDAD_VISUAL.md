@@ -46,8 +46,17 @@ Leyenda: ✔ fiel · ◐ fiel con adaptación justificada · ✖ discrepancia.
 Navegación lateral con logo, contenido centrado sin estirar el móvil (máx. 860–940 px) y panel derecho con pasaporte, monedas,
 progreso y sellos (`qa/capturas/web/1366x768`, `1920x1080`). Tablet: columna de 720 px centrada con fondo textil.
 
-## Discrepancias remanentes (no críticas)
-1. Pequeño residuo de halo bajo el brazo de Atahualpa en `atahualpa-delia` (recorte original del kit; limpiado de forma automática sin herramientas de IA por bloqueo de red). Requiere retoque manual del ilustrador.
-2. La moneda del saldo usa `moneda-base` (el emblema de pirámide de la referencia no existe en el kit).
-3. Sellos/monedas de 11 territorios sin arte específico en el kit.
-4. Fondos de bienvenida/álbum/monedas usan las ilustraciones disponibles del kit (plaza, Cumbemayo), no exactamente los paisajes de las composiciones.
+## Correcciones de fidelidad aplicadas (iteración 2)
+| Discrepancia | Corrección |
+|---|---|
+| Halo opaco residual en `atahualpa-delia` (resplandor encerrado entre ambos personajes y fragmentos bajo el brazo) | Segunda pasada documentada en `scripts/assets/limpiar_halo_personajes.py`: semillas en el resplandor encerrado + apertura morfológica; solo se modifica el alfa, nunca los píxeles del personaje (3 759 px eliminados) |
+| Sellos de 11 territorios mostraban un sello genérico con montaña | Sello vectorial con la composición de la ref. 06: doble anillo perforado, pictograma propio de cada territorio tomado de las referencias (Chota y Contumazá: iglesia; Cutervo: catarata; Jaén: café; San Marcos: ruinas; San Ignacio: río y montañas; Hualgayoc: picos; Santa Cruz: árbol; San Miguel, Cajabamba, San Pablo: montañas), cinta con el nombre real y tres estrellas. Los 3 sellos con arte original siguen usando `originales_png` |
+| Monedas sin arte mostraban la inicial del territorio | Pictograma grabado en oro sobre `moneda-base` (ref. 07); nombres largos completos (p. ej. BAÑOS DEL INCA) |
+| Libro de sellos sin ornamentos | Esquinas doradas escalonadas, marco interior dorado y ramas de laurel junto al título (ref. 06) |
+| Sellos bloqueados poco legibles | Gris más oscuro y mayor opacidad |
+
+## Discrepancias remanentes (no críticas, justificadas)
+1. La moneda del saldo usa `moneda-base` (el emblema de pirámide de la referencia no existe en el kit; no se inventa arte).
+2. Los sellos y monedas de 11 territorios son vectoriales: el kit solo incluye arte ilustrado para Cajamarca, Baños del Inca y Celendín.
+3. Fondos de bienvenida/álbum/monedas usan las ilustraciones disponibles del kit (plaza, Cumbemayo), no exactamente los paisajes de las composiciones.
+4. Con 14 territorios reales (13 provincias + Los Baños del Inca) frente a 12 del mockup, el panel de progreso del libro de sellos queda un desplazamiento más abajo en 393×852.

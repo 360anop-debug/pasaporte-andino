@@ -379,8 +379,13 @@
 .stamps-top > header { position: relative; }
 .stamp-book { position: relative; margin: 4px 10px 0; padding: 16px 12px 18px 24px; border-radius: 10px 18px 18px 10px; background: radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,.55), transparent 60%), radial-gradient(90% 50% at 90% 100%, rgba(190,130,60,.25), transparent 70%), linear-gradient(180deg, #fbefd6, #f3dcb0); box-shadow: 0 0 0 2px #c99a52, 6px 6px 0 -2px #ecd3a2, 10px 10px 0 -3px #d8b87c, 0 14px 26px rgba(0, 0, 0, .5); }
 .sb-rings { position: absolute; left: 4px; top: 30px; bottom: 30px; width: 12px; background: radial-gradient(circle, #8a5a20 40%, transparent 45%) 0 0 / 12px 46px repeat-y; }
-.sb-title { margin: 0 0 12px; text-align: center; font-family: var(--font-display); font-style: italic; font-weight: 800; font-size: clamp(21px, 6.4vw, 27px); color: var(--burgundy-900); line-height: 1.1; }
-.laurel { color: #b7802b; margin: 0 6px; } .laurel.r { display: inline-block; transform: scaleX(-1); }
+.sb-title { margin: 0 0 12px; display: flex; align-items: center; justify-content: center; gap: 4px; text-align: center; font-family: var(--font-display); font-style: italic; font-weight: 800; font-size: clamp(21px, 6.4vw, 27px); color: var(--burgundy-900); line-height: 1.1; }
+.sb-title .laurel { flex: none; width: 26px; height: 40px; } .sb-title .laurel svg { width: 100%; height: 100%; } .sb-title .laurel.r { transform: scaleX(-1); }
+.sb-corner { position: absolute; width: 46px; height: 46px; pointer-events: none; } .sb-corner svg { width: 100%; height: 100%; }
+.sb-corner.tl { top: 8px; left: 20px; } .sb-corner.tr { top: 8px; right: 8px; transform: scaleX(-1); }
+.sb-corner.bl { bottom: 8px; left: 20px; transform: scaleY(-1); } .sb-corner.br { bottom: 8px; right: 8px; transform: scale(-1, -1); }
+.stamp-book { box-shadow: inset 0 0 0 3px rgba(183, 128, 43, .55), inset 0 0 0 7px rgba(255, 250, 235, .6), inset 0 0 0 9px rgba(183, 128, 43, .45), 0 0 0 2px #c99a52, 6px 6px 0 -2px #ecd3a2, 10px 10px 0 -3px #d8b87c, 0 14px 26px rgba(0, 0, 0, .5) !important; }
+.stamp-grid { gap: 6px 10px; padding: 0 8px; }
 .stamp-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .mini-stamps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin: 10px 0; }
 .progress-panel { display: grid; grid-template-columns: 84px 1fr; gap: 10px; align-items: center; margin: 14px 0 0; padding: 12px; background: linear-gradient(180deg, #7b0b2b, #55081f); border-top: 2px solid var(--gold-500); border-bottom: 2px solid var(--gold-500); }
