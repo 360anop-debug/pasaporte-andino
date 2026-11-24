@@ -13,3 +13,4 @@
 | 9 | Notificaciones push, chat IA, voz animada de guías | Fuera de alcance / sin activos | — | Solo si se aprueba explícitamente |
 | 10 | Pentest externo y revisión legal de privacidad (datos del responsable) | Requiere terceros | — | Antes de publicación masiva |
 | 11 | Aviso moderado `minimatch` en tooling de electron-builder (DMG macOS) | Dependencia de compilación | No se distribuye | Actualizar cuando electron-builder lo publique |
+| 12 | Dispositivos con Android System WebView < 88 sin actualizar | La interfaz usa APIs web modernas (`replaceChildren`, `aspect-ratio`) | La app muestra aviso para actualizar WebView en lugar de funcionar | Mantener WebView actualizada (Google Play); opcionalmente polyfills si el público objetivo lo exige |
