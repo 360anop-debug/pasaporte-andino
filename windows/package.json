@@ -27,8 +27,7 @@
         "from": "web",
         "to": "web",
         "filter": [
-          "**/*",
-          "!demo-media/**"
+          "**/*"
         ]
       }
     ],
