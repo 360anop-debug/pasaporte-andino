@@ -21,9 +21,23 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
   const extra = [];
   const check = async (name, fn) => { try { await fn(); extra.push({ paso: name, ok: true }); L('OK   ' + name); } catch (e) { extra.push({ paso: name, ok: false, error: e.message }); L('FAIL ' + name + ': ' + e.message); } };
 
+  // La WebView sustituye su página inicial (about:blank) por la app al arrancar: se re-adquiere hasta que la app está lista.
+  async function appPage() {
+    const t0 = Date.now();
+    let last;
+    while (Date.now() - t0 < 120000) {
+      try {
+        const wv = await device.webView({ pkg: PKG }, { timeout: 30000 });
+        const p = await wv.page();
+        await p.waitForFunction(() => window.__paReady === true, null, { timeout: 15000 });
+        return p;
+      } catch (e) { last = e; await new Promise((r) => setTimeout(r, 2000)); }
+    }
+    throw last;
+  }
   await sh(`am start -W -n ${PKG}/.MainActivity`);
-  const webview = await device.webView({ pkg: PKG }, { timeout: 60000 });
-  const page = await webview.page();
+  const page = await appPage();
+  L('WebView lista: ' + page.url());
   const res = await run(page, { shot, checkinCode: code, photo: { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSync('qa/fixtures/foto-prueba.jpg') }, log: L });
 
   await check('botón Atrás de Android vuelve al contexto anterior', async () => {
@@ -75,9 +89,7 @@ const code = (slug) => execSync(`bash -c 'set -a; . scripts/staging.env.sh; php 
   await check('sesión persistente tras cierre forzado (almacenamiento seguro)', async () => {
     await sh(`am force-stop ${PKG}`);
     await sh(`am start -W -n ${PKG}/.MainActivity`);
-    const wv2 = await device.webView({ pkg: PKG }, { timeout: 60000 });
-    const p2 = await wv2.page();
-    await p2.waitForFunction(() => window.__paReady === true, null, { timeout: 60000 });
+    const p2 = await appPage();
     await p2.evaluate(() => { location.hash = '#/pasaporte'; });
     await p2.waitForSelector('[data-testid=passport-code]', { timeout: 30000 });
     const ls = await p2.evaluate(() => Object.keys(localStorage).join(','));
