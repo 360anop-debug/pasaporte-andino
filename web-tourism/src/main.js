@@ -81,10 +81,11 @@ onRender(async ({ path, r, params }) => {
     main.scrollTop = 0;
     window.scrollTo(0, 0);
     main.focus({ preventScroll: true });
+    window.__paReady = true; // lista solo cuando una pantalla terminó de renderizarse (las pruebas E2E dependen de ello)
     if (chrome) buildAside(shell.querySelector('.side-panel'));
   } catch (e) {
     console.error(e);
-    if (my === seq) main.replaceChildren(errorState(e, () => render()));
+    if (my === seq) { main.replaceChildren(errorState(e, () => render())); window.__paReady = true; }
   }
 });
 
@@ -106,7 +107,6 @@ async function boot() {
   window.addEventListener('online', async () => { const n = await flushEvents(); if (n) toast(`✓ ${n}`); });
   flushEvents().catch(() => {});
   if ('serviceWorker' in navigator && TARGET === 'web' && location.protocol === 'https:') navigator.serviceWorker.register('./sw.js').catch(() => {});
-  window.__paReady = true;
   render();
 }
 boot();
