@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   backend:
@@ -231,6 +231,7 @@ jobs:
           node qa/e2e/windows.cjs $exe qa/capturas/windows
           $e2e = $LASTEXITCODE
           "e2e exit=$e2e" | Tee-Object -FilePath $log -Append
+          Get-Content "$env:RUNNER_TEMP\php-err.log" -Tail 40 -ErrorAction SilentlyContinue | Tee-Object -FilePath qa/logs/php-servidor-windows.txt
           Get-Process 'Pasaporte Andino' -ErrorAction SilentlyContinue | Stop-Process -Force
           $u = Start-Process (Join-Path $dir 'Uninstall Pasaporte Andino.exe') -ArgumentList '/S' -Wait -PassThru
           Start-Sleep 5
@@ -265,3 +266,37 @@ jobs:
             instaladores/*.exe
             qa/capturas/windows
             qa/logs
+
+  entregables:
+    name: Publicar entregables en la rama 'entregables'
+    needs: [backend, android, windows]
+    if: always() && needs.backend.result == 'success'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: art }
+      - name: Empaquetar (binarios divididos en partes < 95 MB) y publicar
+        run: |
+          set -euo pipefail
+          mkdir -p out/instaladores out/qa
+          find art -name '*.apk' -o -name '*.aab' -o -name '*.exe' | while read -r f; do cp "$f" out/instaladores/; done
+          ( cd out/instaladores && for f in *; do [ -f "$f" ] && sha256sum "$f" >> SHA256SUMS.txt; done; cat SHA256SUMS.txt || true )
+          ( cd out/instaladores && for f in *.exe *.apk *.aab; do [ -f "$f" ] || continue; if [ $(stat -c%s "$f") -gt 95000000 ]; then split -b 90m -d "$f" "$f.part"; rm "$f"; fi; done )
+          for a in qa-backend android windows; do [ -d "art/$a" ] && cp -r "art/$a" "out/qa/$a" || true; done
+          find out/qa -name '*.apk' -delete -o -name '*.exe' -delete -o -name '*.aab' -delete
+          cat > out/RESULTADO_CI.md <<MD
+          # Resultado CI ${GITHUB_RUN_ID}
+          - commit: ${GITHUB_SHA}
+          - backend: ${{ needs.backend.result }}
+          - android: ${{ needs.android.result }}
+          - windows: ${{ needs.windows.result }}
+          - run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
+          MD
+          cd out
+          git init -q -b entregables
+          git config user.name "Pasaporte Andino CI"; git config user.email "noreply@anthropic.com"
+          git add -A && git commit -qm "Entregables CI run ${GITHUB_RUN_ID} (${GITHUB_SHA::7}) [skip ci]"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}" entregables

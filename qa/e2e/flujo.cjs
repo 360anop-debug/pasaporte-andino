@@ -23,7 +23,9 @@ async function run(page, h) {
   const step = async (name, fn) => {
     const t0 = Date.now();
     try { await fn(); results.push({ paso: name, ok: true, ms: Date.now() - t0 }); h.log(`OK   ${name}`); }
-    catch (e) { results.push({ paso: name, ok: false, error: String(e.message || e).slice(0, 400) }); h.log(`FAIL ${name}: ${e.message}`); await h.shot('FALLO-' + name.replace(/\W+/g, '_')).catch(() => {}); throw e; }
+    catch (e) {
+      const ctx = await page.evaluate(() => ({ hash: location.hash, errores: [...document.querySelectorAll('.field-err, .form-err, .state.error, .toast')].map((x) => x.textContent.trim()).filter(Boolean) })).catch(() => ({}));
+      results.push({ paso: name, ok: false, error: String(e.message || e).slice(0, 400), contexto: ctx }); h.log(`FAIL ${name}: ${e.message} · contexto ${JSON.stringify(ctx)}`); await h.shot('FALLO-' + name.replace(/\W+/g, '_')).catch(() => {}); throw e; }
   };
   await step('arranque y bienvenida', async () => {
     await waitReady(page);

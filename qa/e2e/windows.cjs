@@ -15,6 +15,9 @@ const photo = { name: 'foto.jpg', mimeType: 'image/jpeg', buffer: fs.readFileSyn
 async function launch(args = []) {
   const app = await _electron.launch({ executablePath: exe, args, timeout: 60000 });
   const page = await app.firstWindow();
+  page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') L(`[consola ${m.type()}] ${m.text()}`); });
+  page.on('pageerror', (e) => L('[pageerror] ' + e.message));
+  page.on('requestfailed', (r) => L(`[red falló] ${r.method()} ${r.url()} ${r.failure()?.errorText}`));
   await page.waitForFunction(() => window.__paReady === true, null, { timeout: 60000 });
   return { app, page };
 }
