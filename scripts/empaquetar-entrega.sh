@@ -16,18 +16,21 @@ rsync -a --exclude node_modules --exclude web --exclude dist-installer "$ROOT/wi
 cp -r "$ROOT"/scripts/* "$E/scripts/"; cp -r "$ROOT/.github" "$E/scripts/github-actions"
 cp -r "$ROOT/qa/scripts" "$ROOT/qa/e2e" "$ROOT/qa/fixtures" "$E/qa/"; rm -rf "$E/qa/e2e/node_modules"
 # Instaladores (reensamblados desde partes si hiciera falta) — solo los realmente compilados por CI
-( cd "$CI/instaladores" && for p in *.part00; do [ -e "$p" ] || continue; b="${p%.part00}"; cat "$b".part* > "$b"; rm "$b".part*; done )
+( cd "$CI/instaladores" && shopt -s nullglob && for p in *.part00; do [ -e "$p" ] || continue; b="${p%.part00}"; cat "$b".part* > "$b"; rm "$b".part*; done )
 for f in PasaporteAndino-Android.apk PasaporteAndino-Android.aab PasaporteAndino-Setup.exe; do [ -f "$CI/instaladores/$f" ] && cp "$CI/instaladores/$f" "$E/instaladores/"; done
 ( cd "$CI/instaladores" && sha256sum -c SHA256SUMS.txt --ignore-missing )
 # QA
 cp -r "$ROOT/qa/capturas/web" "$ROOT/qa/capturas/comparativas" "$E/qa/capturas/"
-[ -d "$CI/qa/android" ] && cp -r "$CI/qa/android" "$E/qa/capturas/android-emulador" || true
+for d in "$CI"/qa/android-e2e-*; do [ -d "$d" ] && cp -r "$d" "$E/qa/capturas/$(basename "$d")"; done
+[ -d "$CI/qa/android" ] && cp -r "$CI/qa/android" "$E/qa/capturas/android-build" || true
 [ -d "$CI/qa/windows" ] && cp -r "$CI/qa/windows" "$E/qa/capturas/windows-instalado" || true
 find "$E/qa/capturas" -name '*.txt' -exec mv {} "$E/qa/logs-sanitizados/" \; 2>/dev/null || true
 [ -d "$CI/qa/qa-backend" ] && cp "$CI"/qa/qa-backend/* "$E/qa/reportes/" || true
 cp "$ROOT"/qa/reportes/* "$E/qa/reportes/"; cp "$CI/RESULTADO_CI.md" "$E/qa/reportes/" 2>/dev/null || true
 # Sanitizar: sin secretos ni rutas personales
-grep -rlE "BEGIN (RSA|PRIVATE)|x-access-token|ghp_|github_pat_" "$E" && { echo "SECRETO DETECTADO"; exit 1; } || true
+# (patrones de secretos reales; las expresiones ${{ github.token }} del workflow no son secretos)
+if grep -rIlE "BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE KEY|ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|x-access-token:[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}" "$E"; then echo "SECRETO DETECTADO"; exit 1; fi
+find "$E" \( -name '*.jks' -o -name '*.keystore' -o -name '*.p12' -o -name '*.pfx' -o -name 'local.php' -o -name '.env.local' \) | grep . && { echo "ARCHIVO SENSIBLE DETECTADO"; exit 1; } || true
 # Manifiesto
 python3 -I - "$E" <<'PY'
 import os, sys, json, hashlib

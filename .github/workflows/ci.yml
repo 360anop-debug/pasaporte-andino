@@ -1,8 +1,12 @@
 name: Pasaporte Andino CI
 
+# Ahorro de minutos: en cada push solo se ejecutan Backend y Web (rápidos). La compilación e instalación de
+# APK/EXE (emuladores y Windows, costosos) se ejecuta al lanzar el workflow manualmente o al etiquetar v*.
 on:
   push:
     branches: [main]
+    tags: ['v*']
+    paths-ignore: ['**.md', 'docs/**', 'qa/capturas/**']
   workflow_dispatch:
 
 permissions:
@@ -87,6 +91,7 @@ jobs:
   android:
     name: Android APK/AAB (build y firma)
     needs: [web]
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
@@ -144,7 +149,6 @@ jobs:
         include:
           - { api: 34, gpu: guest, parte: flujo }
           - { api: 34, gpu: guest, parte: nativo }
-          - { api: 33, gpu: guest, parte: flujo }
           - { api: 30, gpu: guest, parte: compatibilidad }
     services:
       mariadb:
@@ -199,6 +203,7 @@ jobs:
   windows:
     name: Windows EXE + instalación/E2E/desinstalación
     needs: [web]
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
     runs-on: windows-2022
     timeout-minutes: 60
     defaults: { run: { shell: pwsh } }
@@ -305,9 +310,9 @@ jobs:
             qa/logs
 
   entregables:
-    name: Publicar entregables en la rama 'entregables'
+    name: Entrega (APK, EXE y ZIP como artefactos descargables)
     needs: [backend, android, android-e2e, windows]
-    if: always() && needs.backend.result == 'success'
+    if: always() && needs.backend.result == 'success' && needs.android.result == 'success' && needs.windows.result == 'success'
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -315,26 +320,52 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with: { path: art }
-      - name: Empaquetar (binarios divididos en partes < 95 MB) y publicar
+      - name: Reunir binarios y evidencias
         run: |
           set -euo pipefail
-          mkdir -p out/instaladores out/qa
-          find art -name '*.apk' -o -name '*.aab' -o -name '*.exe' | while read -r f; do cp "$f" out/instaladores/; done
-          ( cd out/instaladores && for f in *; do [ -f "$f" ] && sha256sum "$f" >> SHA256SUMS.txt; done; cat SHA256SUMS.txt || true )
-          ( cd out/instaladores && for f in *.exe *.apk *.aab; do [ -f "$f" ] || continue; if [ $(stat -c%s "$f") -gt 95000000 ]; then split -b 90m -d "$f" "$f.part"; rm "$f"; fi; done )
-          for a in art/*; do n=$(basename "$a"); [ "$n" = web-dist ] && continue; cp -r "$a" "out/qa/$n"; done
-          find out/qa -name '*.apk' -delete -o -name '*.exe' -delete -o -name '*.aab' -delete
-          cat > out/RESULTADO_CI.md <<MD
-          # Resultado CI ${GITHUB_RUN_ID}
+          mkdir -p ci/instaladores ci/qa
+          find art \( -name '*.apk' -o -name '*.aab' -o -name '*.exe' \) -exec cp {} ci/instaladores/ \;
+          ( cd ci/instaladores && sha256sum * | tee SHA256SUMS.txt )
+          for a in art/*; do n=$(basename "$a"); [ "$n" = web-dist ] && continue; cp -r "$a" "ci/qa/$n"; done
+          find ci/qa \( -name '*.apk' -o -name '*.aab' -o -name '*.exe' \) -delete
+          cat > ci/RESULTADO_CI.md <<MD
+          # Resultado CI ${GITHUB_RUN_ID} (intento ${GITHUB_RUN_ATTEMPT})
           - commit: ${GITHUB_SHA}
           - backend: ${{ needs.backend.result }}
           - android (build): ${{ needs.android.result }}
-          - android (e2e matriz): ${{ needs.android-e2e.result }}
-          - windows: ${{ needs.windows.result }}
+          - android (E2E en emuladores): ${{ needs.android-e2e.result }}
+          - windows (build, instalación, E2E, desinstalación): ${{ needs.windows.result }}
           - run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
           MD
-          cd out
-          git init -q -b entregables
+      - name: Empaquetar PASAPORTE_ANDINO_ENTREGA_FINAL.zip
+        run: bash scripts/empaquetar-entrega.sh "$PWD/ci" "$PWD/out"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PasaporteAndino-Android
+          path: |
+            ci/instaladores/PasaporteAndino-Android.apk
+            ci/instaladores/PasaporteAndino-Android.aab
+            ci/instaladores/SHA256SUMS.txt
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PasaporteAndino-Windows
+          path: |
+            ci/instaladores/PasaporteAndino-Setup.exe
+            ci/instaladores/SHA256SUMS.txt
+          retention-days: 90
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PASAPORTE_ANDINO_ENTREGA_FINAL
+          path: out/PASAPORTE_ANDINO_ENTREGA_FINAL.zip
+          retention-days: 90
+          compression-level: 0
+      - name: Copia en la rama 'entregables' (binarios divididos en partes < 95 MB)
+        run: |
+          set -euo pipefail
+          mkdir -p br && cp -r ci/. br/
+          ( cd br/instaladores && for f in *.exe *.apk *.aab; do [ -f "$f" ] || continue; if [ $(stat -c%s "$f") -gt 95000000 ]; then split -b 90m -d "$f" "$f.part"; rm "$f"; fi; done )
+          cd br && git init -q -b entregables
           git config user.name "Pasaporte Andino CI"; git config user.email "noreply@anthropic.com"
           git add -A && git commit -qm "Entregables CI run ${GITHUB_RUN_ID} (${GITHUB_SHA::7}) [skip ci]"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}" entregables
