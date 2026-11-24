@@ -119,8 +119,9 @@ jobs:
           PA_KEY_PASSWORD: ${{ github.run_id }}-pa
         run: |
           rm -rf web-tourism/dist && cp -r web-tourism/dist-prod web-tourism/dist
-          cd android && npx cap sync android && cd android && ./gradlew --no-daemon assembleRelease
+          cd android && npx cap sync android && cd android && ./gradlew --no-daemon assembleRelease bundleRelease
           mkdir -p ../../instaladores && cp app/build/outputs/apk/release/app-release.apk ../../instaladores/PasaporteAndino-Android.apk
+          cp app/build/outputs/bundle/release/app-release.aab ../../instaladores/PasaporteAndino-Android.aab
       - name: APK staging (depurable, API del host para E2E)
         run: |
           rm -rf web-tourism/dist && cp -r web-tourism/dist-android-staging web-tourism/dist
@@ -157,6 +158,7 @@ jobs:
           name: android
           path: |
             instaladores/*.apk
+            instaladores/*.aab
             qa/capturas/android
             qa/logs
 
